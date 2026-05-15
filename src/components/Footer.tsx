@@ -150,13 +150,16 @@ export default function Footer() {
               </div>
 
               <button
-                type="submit"
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-medium text-white transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 mt-2"
-                style={{ background: 'linear-gradient(135deg, #726E97, #7698B3)' }}
-              >
-                <LogIn className="w-4 h-4" />
-                Ingresar a BioSafe
-              </button>
+  type="button"
+  onClick={() => {
+    window.location.hash = "admin";
+  }}
+  className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-medium text-white transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 mt-2"
+  style={{ background: "linear-gradient(135deg, #726E97, #7698B3)" }}
+>
+  <LogIn className="w-4 h-4" />
+  Ingresar a BioSafe
+</button>
             </form>
           </div>
         </div>
