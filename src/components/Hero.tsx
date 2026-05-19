@@ -1,14 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LogIn, PlayCircle, ArrowRight } from 'lucide-react';
 
 interface AnimatedTitleProps {
   line: string;
   className?: string;
   style?: React.CSSProperties;
+  globalOffset?: number;
 }
 
-function AnimatedTitle({ line, className, style }: AnimatedTitleProps) {
+function AnimatedTitle({ line, className, style, globalOffset = 0 }: AnimatedTitleProps) {
   const [hovered, setHovered] = useState<number | null>(null);
+  const [doneAnimating, setDoneAnimating] = useState<boolean[]>(() =>
+    Array(line.length).fill(false)
+  );
+
+  useEffect(() => {
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    line.split('').forEach((_, i) => {
+      const animDelay = (globalOffset + i) * 45;
+      const animDuration = 600;
+
+      const t = setTimeout(() => {
+        setDoneAnimating(prev => {
+          const next = [...prev];
+          next[i] = true;
+          return next;
+        });
+      }, animDelay + animDuration);
+
+      timers.push(t);
+    });
+
+    return () => timers.forEach(clearTimeout);
+  }, [line, globalOffset]);
+
   return (
     <span className={className} style={style}>
       {line.split('').map((char: string, i: number) =>
@@ -21,9 +47,18 @@ function AnimatedTitle({ line, className, style }: AnimatedTitleProps) {
             onMouseLeave={() => setHovered(null)}
             style={{
               display: 'inline-block',
-              transition: 'transform 0.3s cubic-bezier(.34,1.56,.64,1), color 0.3s ease',
-              transform: hovered === i ? 'translateY(-8px) scale(1.18) rotate(-4deg)' : 'none',
-              color: hovered === i ? '#c4b5fd' : 'inherit',
+              opacity: doneAnimating[i] ? 1 : undefined,
+              animation: doneAnimating[i]
+                ? 'none'
+                : `letterDrop 0.6s cubic-bezier(.34,1.56,.64,1) ${(globalOffset + i) * 45}ms both`,
+              transition: doneAnimating[i]
+                ? 'transform 0.3s cubic-bezier(.34,1.56,.64,1), color 0.3s ease'
+                : undefined,
+              transform:
+                doneAnimating[i] && hovered === i
+                  ? 'translateY(-8px) scale(1.18) rotate(-4deg)'
+                  : 'none',
+              color: doneAnimating[i] && hovered === i ? '#c4b5fd' : 'inherit',
             }}
           >
             {char}
@@ -34,6 +69,9 @@ function AnimatedTitle({ line, className, style }: AnimatedTitleProps) {
   );
 }
 
+const LINE1 = 'La Bioseguridad';
+const LINE2 = 'Materno-Infantil';
+const LINE3 = 'centralizada en la nube.';
 
 export default function Hero() {
   return (
@@ -66,13 +104,9 @@ export default function Hero() {
       />
 
       {/* CONTENT — centred column */}
-      <div
-        className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto w-full"
-      >
-        {/* Badge */}
-       
-         <div className="h-12 mb-6"></div>
-       
+      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto w-full">
+        {/* Badge spacer */}
+        <div className="h-12 mb-6"></div>
 
         {/* Main headline */}
         <h1
@@ -83,14 +117,23 @@ export default function Hero() {
             animation: 'fadeUp 0.6s ease 0.1s both',
           }}
         >
-          <AnimatedTitle line="La Bioseguridad" />
+          <AnimatedTitle
+            line={LINE1}
+            globalOffset={0}
+          />
           <br />
           <span className="font-semibold" style={{ color: '#c4b5fd' }}>
-            <AnimatedTitle line="Materno-Infantil" />
+            <AnimatedTitle
+              line={LINE2}
+              globalOffset={LINE1.length}
+            />
           </span>
           <br />
           <span style={{ color: '#bfdbfe', fontWeight: 300 }}>
-            <AnimatedTitle line="centralizada en la nube." />
+            <AnimatedTitle
+              line={LINE3}
+              globalOffset={LINE1.length + LINE2.length}
+            />
           </span>
         </h1>
 
@@ -135,7 +178,7 @@ export default function Hero() {
           </a>
         </div>
 
-        {/* Stats */}
+        {/* Stats row (vacío, mantenido por estructura) */}
         <div
           className="flex items-center"
           style={{
@@ -143,9 +186,7 @@ export default function Hero() {
             paddingTop: '2rem',
             animation: 'fadeUp 0.6s ease 0.4s both',
           }}
-        >
-        
-        </div>
+        />
       </div>
 
       {/* Floating pill — QR — bottom right */}
@@ -173,10 +214,13 @@ export default function Hero() {
         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse ml-1" />
       </div>
 
-      {/* Floating badge — cobertura — bottom left */}
-      
-
       <style>{`
+        @keyframes letterDrop {
+          0%   { opacity: 0; transform: translateY(-28px) scale(0.8) rotate(-6deg); }
+          60%  { opacity: 1; transform: translateY(4px) scale(1.06) rotate(2deg); }
+          80%  { transform: translateY(-3px) scale(0.98) rotate(-1deg); }
+          100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+        }
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(24px); }
           to   { opacity: 1; transform: translateY(0); }
