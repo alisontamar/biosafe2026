@@ -111,8 +111,11 @@ export default function AdminDashboard() {
   };
 
   const renderView = () => {
-    switch (activeTab) {
-      case "inicio": return <HomeView />;
+    const allowedIds = getFilteredMenu().map(m => m.id);
+    const safeTab = allowedIds.includes(activeTab) ? activeTab : 'inicio';
+
+    switch (safeTab) {
+      case "inicio": return <HomeView onNavigate={(tab) => { setActiveTab(tab); setSidebarOpen(false); }} />;
       case "pacientes": return <PatientsView />;
       case "vacunacion": return <VaccinationView />;
       case "alertas": return <AlertsView />;

@@ -1,8 +1,6 @@
-import { useState, useRef, useEffect } from "react";
-import { UserRound, Baby, ShieldCheck, AlertTriangle, QrCode, TrendingUp, MapPin, Activity } from "lucide-react";
+import { useState, useEffect } from "react";
+import { UserRound, Baby, ShieldCheck, AlertTriangle, QrCode, Activity } from "lucide-react";
 import { supabase } from "../lib/supabase";
-// Importamos la librería de lectura de QR
-import { Html5Qrcode } from "html5-qrcode";
 
 // ── StatCard ──────────────────────────────────────────────────────────────────
 function StatCard({ icon: Icon, title, value, detail, color }: {
@@ -28,99 +26,8 @@ function StatCard({ icon: Icon, title, value, detail, color }: {
   );
 }
 
-// ── QRScanner (FUNCIONAL CON HTML5-QRCODE Y SUPABASE) ─────────────────────────
-function QRScanner({ idEstablecimiento }: { idEstablecimiento: string | null }) {
-  const [scanning, setScanning] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const scannerRef = useRef<Html5Qrcode | null>(null);
-
-  // Función para validar el QR escaneado con la Base de Datos
-  const validarQREnBD = async (tokenQR: string) => {
-    try {
-      setResult("Buscando en la base de datos...");
-      
-      const { data: paciente, error: errQR } = await supabase
-        .from('pacientes')
-        .select('nombre_completo, id_paciente')
-        .eq('codigo_qr_token', tokenQR)
-        .single();
-
-      if (errQR || !paciente) {
-        setError("Paciente no encontrado. El QR es inválido o no está registrado.");
-        setResult(null);
-        return;
-      }
-
-      setError(null);
-      setResult(`Identidad validada ✓ – ${paciente.nombre_completo}`);
-      
-      // Aquí en el futuro podrías abrir un modal automáticamente con el historial del paciente
-      
-    } catch (err) {
-      setError("Error de conexión al validar el QR.");
-      setResult(null);
-    }
-  };
-
-  const startScan = async () => {
-    setResult(null);
-    setError(null);
-    setScanning(true);
-
-    try {
-      // Inicializamos el lector apuntando al div con id="qr-reader"
-      const html5QrCode = new Html5Qrcode("qr-reader");
-      scannerRef.current = html5QrCode;
-
-      await html5QrCode.start(
-        { facingMode: "environment" }, // Usa la cámara trasera en celulares
-        {
-          fps: 10,    // Escaneos por segundo
-          qrbox: { width: 250, height: 250 } // Cuadro de escaneo
-        },
-        async (decodedText) => {
-          // ÉXITO: Leyó un QR
-          await html5QrCode.stop(); // Apagamos la cámara al leer
-          scannerRef.current = null;
-          setScanning(false);
-          
-          // Enviamos el texto leído a la BD
-          validarQREnBD(decodedText);
-        },
-        (errorMessage) => {
-          // Errores de lectura ignorables (pasan mil veces por segundo mientras intenta enfocar)
-        }
-      );
-    } catch (err) {
-      console.error(err);
-      setError("No se pudo acceder a la cámara. Verifica los permisos del navegador.");
-      setScanning(false);
-    }
-  };
-
-  const stopScan = async () => {
-    if (scannerRef.current) {
-      try {
-        await scannerRef.current.stop();
-        scannerRef.current.clear();
-      } catch (err) {
-        console.error("Error al detener cámara", err);
-      }
-      scannerRef.current = null;
-    }
-    setScanning(false);
-  };
-
-  // Limpieza por si el usuario cambia de pestaña mientras la cámara está prendida
-  useEffect(() => {
-    return () => {
-      if (scannerRef.current) {
-        scannerRef.current.stop().catch(console.error);
-      }
-    };
-  }, []);
-
+// ── Acceso rápido a vacunación ────────────────────────────────────────────────
+function QuickVaccinationCard({ onNavigate }: { onNavigate?: (tab: string) => void }) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col gap-4">
       <div className="flex items-center gap-3">
@@ -128,58 +35,26 @@ function QRScanner({ idEstablecimiento }: { idEstablecimiento: string | null }) 
           <QrCode size={20} />
         </div>
         <div>
-          <h2 className="font-bold text-slate-900 text-sm">Validación QR</h2>
-          <p className="text-xs text-slate-400">Escanea el código para validar esquema y dosis aplicadas</p>
+          <h2 className="font-bold text-slate-900 text-sm">Registrar vacuna</h2>
+          <p className="text-xs text-slate-400">Escanea el carnet QR del paciente para registrar la dosis</p>
         </div>
       </div>
-
-      <div className="relative rounded-xl overflow-hidden bg-slate-100 aspect-video flex items-center justify-center">
-        {/* Contenedor donde la librería inyectará el video de la cámara */}
-        <div id="qr-reader" className={`w-full h-full ${!scanning ? 'hidden' : 'block'}`}></div>
-        
-        {/* Overlay decorativo mientras escanea */}
-        {scanning && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-44 h-44 border-2 border-[#726E97] rounded-lg relative">
-              <span className="absolute -top-px -left-px w-5 h-5 border-t-4 border-l-4 border-[#726E97] rounded-tl" />
-              <span className="absolute -top-px -right-px w-5 h-5 border-t-4 border-r-4 border-[#726E97] rounded-tr" />
-              <span className="absolute -bottom-px -left-px w-5 h-5 border-b-4 border-l-4 border-[#726E97] rounded-bl" />
-              <span className="absolute -bottom-px -right-px w-5 h-5 border-b-4 border-r-4 border-[#726E97] rounded-br" />
-              <div className="absolute left-0 right-0 h-0.5 bg-[#726E97] opacity-70 animate-[scanline_1.5s_ease-in-out_infinite]" style={{ animation: "scanline 1.5s ease-in-out infinite" }} />
-            </div>
-          </div>
-        )}
-
-        {!scanning && (
-          <div className="flex flex-col items-center gap-3 text-slate-300">
-            <QrCode size={56} />
-            <p className="text-xs">Cámara inactiva</p>
-          </div>
-        )}
-      </div>
-
-      {result && <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-3 text-xs text-emerald-700 font-medium">{result}</div>}
-      {error && <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-xs text-red-600 font-medium">{error}</div>}
-
-      {scanning ? (
-        <button onClick={stopScan} className="w-full py-3 rounded-lg bg-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-300 transition">Cancelar</button>
-      ) : (
-        <button onClick={startScan} className="w-full py-3 rounded-lg bg-[#726E97] text-white font-semibold text-sm hover:opacity-90 transition">Escanear QR</button>
-      )}
-
-      <style>{`
-        /* Oculta los estilos horribles por defecto que trae html5-qrcode */
-        #qr-reader { border: none !important; }
-        #qr-reader img { display: none !important; }
-        #qr-reader__dashboard_section_csr span { display: none !important; }
-        #qr-reader__dashboard_section_swaplink { display: none !important; }
-      `}</style>
+      <p className="text-xs text-slate-500 bg-slate-50 rounded-lg p-3 border">
+        El registro de dosis se realiza desde la sección <strong>Vacunación</strong>, donde puedes seleccionar la vacuna del catálogo oficial y escanear el código QR del paciente.
+      </p>
+      <button
+        onClick={() => onNavigate?.("vacunacion")}
+        className="w-full py-3 rounded-lg text-white font-semibold text-sm hover:opacity-90 transition"
+        style={{ background: "#726E97" }}
+      >
+        Ir a Vacunación
+      </button>
     </div>
   );
 }
 
 // ── HomeView (main) ───────────────────────────────────────────────────────────
-export function HomeView() {
+export function HomeView({ onNavigate }: { onNavigate?: (tab: string) => void }) {
   const [loading, setLoading] = useState(true);
   const [idEstablecimiento, setIdEstablecimiento] = useState<string | null>(null);
   
@@ -355,7 +230,7 @@ export function HomeView() {
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <QRScanner idEstablecimiento={idEstablecimiento} />
+        <QuickVaccinationCard onNavigate={onNavigate} />
         
         <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
            <div className="flex items-center gap-3 mb-4">
