@@ -81,7 +81,10 @@ function QRModal({
       scannerRef.current = qr;
       await qr.start(
         { facingMode: "environment" },
-        { fps: 10, qrbox: { width: 220, height: 220 } },
+        {
+          fps: 15,
+          qrbox: { width: 260, height: 260 },
+        },
         async (decodedText) => {
           await qr.stop();
           scannerRef.current = null;
@@ -110,8 +113,9 @@ function QRModal({
         const parsed = JSON.parse(decodedText);
         id_paciente = parsed.id_paciente;
         token = parsed.token;
+        if (!id_paciente || !token) throw new Error("Campos faltantes");
       } catch {
-        setError("Formato de QR no reconocido.");
+        setError(`Formato de QR no reconocido. Contenido: ${decodedText.slice(0, 60)}`);
         setScanState("idle");
         return;
       }
@@ -123,8 +127,13 @@ function QRModal({
         .eq("codigo_qr_token", token)
         .single();
 
-      if (errPac || !pac) {
-        setError("Paciente no encontrado. El QR es inválido o no está registrado.");
+      if (errPac) {
+        setError(`Error de base de datos: ${errPac.message} (código: ${errPac.code})`);
+        setScanState("idle");
+        return;
+      }
+      if (!pac) {
+        setError(`Paciente no encontrado. Verifica que el QR corresponde a un paciente registrado en este sistema.`);
         setScanState("idle");
         return;
       }
@@ -202,7 +211,7 @@ function QRModal({
                 <div id="qr-reader-modal" className={`w-full h-full ${scanState === "active" ? "block" : "hidden"}`} />
                 {scanState === "active" && (
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="w-44 h-44 border-2 border-[#726E97] rounded-lg relative">
+                    <div className="w-52 h-52 border-2 border-[#726E97] rounded-lg relative">
                       <span className="absolute -top-px -left-px w-5 h-5 border-t-4 border-l-4 border-[#726E97] rounded-tl" />
                       <span className="absolute -top-px -right-px w-5 h-5 border-t-4 border-r-4 border-[#726E97] rounded-tr" />
                       <span className="absolute -bottom-px -left-px w-5 h-5 border-b-4 border-l-4 border-[#726E97] rounded-bl" />
