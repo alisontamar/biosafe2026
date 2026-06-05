@@ -1,304 +1,338 @@
-import { useState } from 'react';
-import {
-  Brain,
-  AlertTriangle,
-  MapPin,
-  Thermometer,
-  Syringe,
-  CheckCircle2,
-  TrendingDown,
-  Globe,
-  ShieldCheck,
-} from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import { MapPin, AlertTriangle, ShieldCheck, Bell, Loader2, TrendingDown, Globe, Thermometer } from 'lucide-react';
 
-const signals = [
-  {
-    icon: TrendingDown,
-    title: 'Abandono local',
-    text: 'Detecta zonas con menor continuidad en esquemas de vacunación.',
-  },
-  {
-    icon: Globe,
-    title: 'Datos externos',
-    text: 'Cruza señales epidemiológicas oficiales y contexto regional.',
-  },
-  {
-    icon: Thermometer,
-    title: 'Clima regional',
-    text: 'Relaciona frío, lluvias y temporada con riesgo preventivo.',
-  },
+type RiskLevel = 'alto' | 'moderado' | 'bajo';
+
+interface AlertPoint {
+  lat: number;
+  lng: number;
+  city: string;
+  risk: RiskLevel;
+  type: string;
+  message: string;
+}
+
+const alertPoints: AlertPoint[] = [
+  { lat: -16.5,  lng: -68.15, city: 'La Paz',      risk: 'alto',     type: 'Frío intenso',       message: 'Temperaturas bajas generan riesgo respiratorio elevado. Revisa que las vacunas de tus hijos estén al día.' },
+  { lat: -17.39, lng: -66.16, city: 'Cochabamba',   risk: 'moderado', type: 'Temporada lluviosa',  message: 'Vigilancia activa por enfermedades de transmisión hídrica. Mantén higiene y vacunación al día.' },
+  { lat: -17.78, lng: -63.18, city: 'Santa Cruz',   risk: 'moderado', type: 'Calor extremo',       message: 'Temperaturas altas aumentan el riesgo de deshidratación en niños pequeños.' },
+  { lat: -11.02, lng: -66.0,  city: 'Trinidad',     risk: 'alto',     type: 'Alerta vectorial',    message: 'Alta actividad de vectores en la zona. Vacuna de Fiebre Amarilla obligatoria para menores.' },
+  { lat: -19.58, lng: -65.75, city: 'Potosí',       risk: 'alto',     type: 'Frío severo',         message: 'Temperaturas bajo cero. Infecciones respiratorias en aumento. Protege a los menores de 5 años.' },
+  { lat: -21.53, lng: -64.73, city: 'Tarija',       risk: 'bajo',     type: 'Sin alertas activas', message: 'Condiciones normales en la zona. Mantén el calendario de vacunación al día como medida preventiva.' },
+  { lat: -17.96, lng: -67.11, city: 'Oruro',        risk: 'alto',     type: 'Frío extremo',        message: 'Semana con temperaturas muy bajas. Alto riesgo de IRA en niños menores de 5 años.' },
+  { lat: -13.8,  lng: -65.38, city: 'Rurrenabaque', risk: 'alto',     type: 'Zona tropical',       message: 'Actividad de vectores elevada. Vacunas de Fiebre Amarilla y tropicales recomendadas.' },
+  { lat: -18.0,  lng: -63.2,  city: 'San Ignacio',  risk: 'moderado', type: 'Vigilancia activa',   message: 'Monitoreo preventivo en curso. Mantén las vacunas de tus hijos actualizadas.' },
+  { lat: -16.28, lng: -63.63, city: 'San Borja',    risk: 'moderado', type: 'Lluvia prolongada',   message: 'Zona con acumulación de agua. Riesgo de enfermedades transmitidas por vectores.' },
 ];
 
+const riskColor: Record<RiskLevel, string> = {
+  alto:     '#ef4444',
+  moderado: '#f59e0b',
+  bajo:     '#10b981',
+};
+
+const riskBg: Record<RiskLevel, string> = {
+  alto:     '#fef2f2',
+  moderado: '#fffbeb',
+  bajo:     '#f0fdf4',
+};
+
+const riskLabel: Record<RiskLevel, string> = {
+  alto:     'Riesgo Alto',
+  moderado: 'Riesgo Moderado',
+  bajo:     'Sin Alertas',
+};
+
+function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+// ── Vanilla Leaflet map component ────────────────────────────────────────────
+function LeafletMap({ userPos }: { userPos: [number, number] | null }) {
+  const divRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const userMarkerRef = useRef<L.CircleMarker | null>(null);
+
+  useEffect(() => {
+    if (!divRef.current || mapRef.current) return;
+
+    const map = L.map(divRef.current, {
+      center: [-16.5, -64.5],
+      zoom: 5,
+      scrollWheelZoom: false,
+      attributionControl: false,
+      zoomControl: true,
+    });
+    mapRef.current = map;
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+    }).addTo(map);
+
+    alertPoints.forEach(pt => {
+      const radius = pt.risk === 'alto' ? 11 : pt.risk === 'moderado' ? 8 : 6;
+      const circle = L.circleMarker([pt.lat, pt.lng], {
+        color: riskColor[pt.risk],
+        fillColor: riskColor[pt.risk],
+        fillOpacity: 0.78,
+        radius,
+        weight: 2,
+      }).addTo(map);
+
+      circle.bindPopup(`
+        <div style="min-width:170px;font-family:system-ui,sans-serif;">
+          <p style="font-weight:700;font-size:0.85rem;margin:0 0 4px;color:#1a1a2e;">${pt.city}</p>
+          <span style="display:inline-block;font-size:0.68rem;font-weight:600;color:${riskColor[pt.risk]};background:${riskBg[pt.risk]};border-radius:999px;padding:2px 8px;margin-bottom:6px;">${riskLabel[pt.risk]}</span>
+          <p style="font-size:0.78rem;font-weight:500;color:#374151;margin:0 0 4px;">${pt.type}</p>
+          <p style="font-size:0.74rem;color:#6b7280;margin:0;line-height:1.5;">${pt.message}</p>
+        </div>
+      `, { maxWidth: 220 });
+    });
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!mapRef.current || !userPos) return;
+
+    userMarkerRef.current?.remove();
+    userMarkerRef.current = L.circleMarker(userPos, {
+      color: '#7698B3',
+      fillColor: '#7698B3',
+      fillOpacity: 0.95,
+      radius: 9,
+      weight: 3,
+    })
+      .addTo(mapRef.current)
+      .bindPopup('<p style="font-size:0.82rem;font-weight:600;margin:0;color:#1a1a2e;">📍 Tu ubicación</p>');
+
+    mapRef.current.flyTo(userPos, 10, { duration: 1.5 });
+  }, [userPos]);
+
+  return <div ref={divRef} style={{ height: '100%', width: '100%' }} />;
+}
+
+// ── Signals list ─────────────────────────────────────────────────────────────
+const signals = [
+  { icon: TrendingDown, title: 'Abandono de esquemas',   text: 'Detecta zonas donde los niños no están completando su vacunación.' },
+  { icon: Globe,        title: 'Datos epidemiológicos',  text: 'Cruza señales de salud pública oficiales con datos del sistema.' },
+  { icon: Thermometer,  title: 'Clima regional',         text: 'Relaciona frío, lluvias y temporada con riesgo preventivo.' },
+];
+
+// ── Main section ─────────────────────────────────────────────────────────────
 export default function AISection() {
-  const [riskChecked, setRiskChecked] = useState(false);
+  const [geoState, setGeoState] = useState<'idle' | 'loading' | 'found' | 'denied'>('idle');
+  const [userPos, setUserPos] = useState<[number, number] | null>(null);
+  const [nearest, setNearest] = useState<AlertPoint | null>(null);
+
+  const handleVerify = () => {
+    if (geoState === 'found') return;
+    setGeoState('loading');
+
+    if (!navigator.geolocation) {
+      setNearest(alertPoints[0]);
+      setGeoState('denied');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        const pos: [number, number] = [coords.latitude, coords.longitude];
+        setUserPos(pos);
+        const closest = alertPoints.reduce((prev, curr) =>
+          haversineKm(pos[0], pos[1], curr.lat, curr.lng) <
+          haversineKm(pos[0], pos[1], prev.lat, prev.lng) ? curr : prev
+        );
+        setNearest(closest);
+        setGeoState('found');
+      },
+      () => {
+        setNearest(alertPoints[0]);
+        setGeoState('denied');
+      },
+      { timeout: 8000 }
+    );
+  };
 
   return (
     <section
       id="ia"
-      className="relative overflow-hidden py-20 sm:py-24 lg:py-28"
       style={{
-        background:
-          'linear-gradient(180deg, #fbfbfd 0%, #f8f7fc 48%, #eef2f7 100%)',
+        padding: '5rem 1.5rem',
+        background: 'linear-gradient(180deg, #fbfbfd 0%, #f8f7fc 50%, #eef2f7 100%)',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
-      {/* Fondo decorativo suave */}
-      <div
-        className="pointer-events-none absolute -top-32 right-0 h-[360px] w-[360px] rounded-full opacity-10 blur-3xl"
-        style={{ background: '#726E97' }}
-      />
-      <div
-        className="pointer-events-none absolute bottom-0 left-0 h-[320px] w-[320px] rounded-full opacity-10 blur-3xl"
-        style={{ background: '#7698B3' }}
-      />
+      {/* Decorative blobs */}
+      <div style={{ position:'absolute', top:-80, right:-60, width:300, height:300, borderRadius:'50%', background:'#726E97', opacity:0.06, filter:'blur(60px)', pointerEvents:'none' }} />
+      <div style={{ position:'absolute', bottom:-60, left:-40, width:260, height:260, borderRadius:'50%', background:'#7698B3', opacity:0.07, filter:'blur(50px)', pointerEvents:'none' }} />
 
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-        {/* Encabezado */}
-        <div className="mx-auto mb-14 max-w-3xl text-center">
+      <div style={{ maxWidth:1100, margin:'0 auto', position:'relative' }}>
 
-          <h2
-            className="text-4xl font-light leading-tight sm:text-5xl lg:text-6xl"
-            style={{ color: '#1a1a2e' }}
-          >
-            IA que anticipa{' '}
-            <span className="italic font-light" style={{ color: '#726E97' }}>
-              riesgos
-            </span>{' '}
-            antes de que ocurran
+        {/* Header */}
+        <div style={{ textAlign:'center', marginBottom:'3rem' }}>
+          <span style={{ display:'inline-block', fontSize:'0.7rem', fontWeight:500, letterSpacing:'0.22em', textTransform:'uppercase', color:'#7698B3', marginBottom:'0.75rem' }}>
+            Inteligencia preventiva
+          </span>
+          <h2 style={{ fontSize:'clamp(1.9rem, 4.5vw, 3rem)', fontWeight:700, color:'#1a1a2e', lineHeight:1.15, margin:'0 0 1rem' }}>
+            Alertas epidemiológicas{' '}
+            <span style={{ color:'#726E97', fontStyle:'italic', fontWeight:300 }}>en tu zona</span>
           </h2>
-
-          <p className="mx-auto mt-6 max-w-2xl text-sm font-light leading-7 text-gray-500 sm:text-base">
-            BioSafe interpreta datos de vacunación, clima y alertas sanitarias
-            para generar señales tempranas de prevención en centros
-            materno-infantiles.
+          <p style={{ color:'#9ca3af', fontWeight:300, fontSize:'0.95rem', maxWidth:500, margin:'0 auto', lineHeight:1.7 }}>
+            BioSafe monitorea señales de salud pública y te notifica si hay un riesgo preventivo
+            cerca de tu familia — antes de que el brote se propague.
           </p>
         </div>
 
-        {/* Contenido principal minimalista */}
-        <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-          {/* Texto izquierdo */}
-          <div className="order-2 lg:order-1">
-            <div className="mb-8 flex items-start gap-4">
-               <div>
-                <h3
-                  className="text-2xl font-semibold leading-tight sm:text-3xl"
-                  style={{ color: '#1a1a2e' }}
-                >
-                  No solo registramos datos, prevenimos riesgos.
-                </h3>
+        {/* Two-column grid */}
+        <div
+          className="ai-grid"
+          style={{ display:'grid', gridTemplateColumns:'1fr 1.25fr', gap:'2.5rem', alignItems:'start' }}
+        >
+          {/* LEFT */}
+          <div>
+            <h3 style={{ fontSize:'1.25rem', fontWeight:700, color:'#1a1a2e', marginBottom:'0.5rem', marginTop:0 }}>
+              La app analiza señales reales para protegerte
+            </h3>
+            <p style={{ fontSize:'0.875rem', fontWeight:300, color:'#6b7280', lineHeight:1.75, marginBottom:'1.75rem' }}>
+              El sistema cruza datos de vacunación, condiciones climáticas y alertas sanitarias
+              oficiales para generar notificaciones preventivas personalizadas para cada zona del país.
+            </p>
 
-                <p className="mt-4 text-sm font-light leading-7 text-gray-500">
-                  El motor de IA analiza patrones de abandono, condiciones
-                  climáticas y señales epidemiológicas para orientar acciones
-                  preventivas antes de que el riesgo aumente.
-                </p>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              {signals.map((item) => {
-                const Icon = item.icon;
-
-                return (
-                  <div key={item.title} className="flex gap-4">
-                    <div
-                      className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
-                      style={{ background: 'rgba(114,110,151,0.09)' }}
-                    >
-                      <Icon className="h-4 w-4" style={{ color: '#726E97' }} />
-                    </div>
-
-                    <div>
-                      <h4
-                        className="text-sm font-semibold"
-                        style={{ color: '#1a1a2e' }}
-                      >
-                        {item.title}
-                      </h4>
-                      <p className="mt-1 text-sm font-light leading-6 text-gray-500">
-                        {item.text}
-                      </p>
-                    </div>
+            <div style={{ display:'flex', flexDirection:'column', gap:'1.1rem', marginBottom:'2rem' }}>
+              {signals.map(({ icon: Icon, title, text }) => (
+                <div key={title} style={{ display:'flex', gap:'0.85rem', alignItems:'flex-start' }}>
+                  <div style={{ width:36, height:36, borderRadius:10, background:'rgba(114,110,151,0.09)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                    <Icon size={16} style={{ color:'#726E97' }} />
                   </div>
-                );
-              })}
+                  <div>
+                    <p style={{ fontSize:'0.875rem', fontWeight:600, color:'#1a1a2e', margin:'0 0 0.2rem' }}>{title}</p>
+                    <p style={{ fontSize:'0.82rem', fontWeight:300, color:'#6b7280', lineHeight:1.65, margin:0 }}>{text}</p>
+                  </div>
+                </div>
+              ))}
             </div>
 
-            <div className="mt-9 flex items-start gap-3 border-l-2 pl-5" style={{ borderColor: '#7698B3' }}>
-              <AlertTriangle
-                className="mt-0.5 h-5 w-5 shrink-0"
-                style={{ color: '#f59e0b' }}
-              />
-              <p className="text-sm font-light leading-6 text-gray-500">
-                Las alertas tempranas ayudan a priorizar campañas, reforzar
-                recordatorios y proteger a los grupos más vulnerables.
+            <div style={{ display:'flex', alignItems:'flex-start', gap:'0.75rem', padding:'1rem 1.25rem', borderLeft:'3px solid #7698B3', background:'rgba(118,152,179,0.06)', borderRadius:'0 12px 12px 0' }}>
+              <Bell size={15} style={{ color:'#726E97', marginTop:2, flexShrink:0 }} />
+              <p style={{ fontSize:'0.82rem', fontWeight:300, color:'#6b7280', lineHeight:1.65, margin:0 }}>
+                Las notificaciones llegan directamente a tu celular. Cuando BioSafe detecta una
+                alerta en tu zona, recibes un aviso con recomendaciones específicas para tu familia.
               </p>
             </div>
           </div>
 
-          {/* Mapa derecho */}
-          <div className="order-1 lg:order-2">
-            <div className="relative mx-auto max-w-xl">
-              <div className="mb-6 text-center lg:text-left">
-                <p
-                  className="mb-2 text-xs font-medium uppercase tracking-[0.24em]"
-                  style={{ color: '#7698B3' }}
-                >
-                  Índice de Riesgo Epidemiológico
-                </p>
-                <h3
-                  className="text-2xl font-semibold sm:text-3xl"
-                  style={{ color: '#1a1a2e' }}
-                >
-                  Mapa preventivo de Bolivia
-                </h3>
-              </div>
+          {/* RIGHT: map */}
+          <div>
+            <p style={{ fontSize:'0.7rem', fontWeight:500, letterSpacing:'0.18em', textTransform:'uppercase', color:'#7698B3', marginBottom:'0.6rem', marginTop:0 }}>
+              Mapa de alertas activas — Bolivia
+            </p>
 
-              {/* Área del mapa sin card pesada */}
-              <div className="relative flex min-h-[340px] items-center justify-center sm:min-h-[390px]">
-                {/* Círculo suave detrás */}
-                <div
-                  className="absolute h-[280px] w-[280px] rounded-full opacity-50 sm:h-[340px] sm:w-[340px]"
-                  style={{
-                    background:
-                      'radial-gradient(circle, rgba(118,152,179,0.22), rgba(114,110,151,0.05), transparent 70%)',
-                  }}
-                />
-
-                <svg
-  viewBox="0 0 260 300"
-  className="relative h-[290px] w-full max-w-[260px] drop-shadow-md sm:h-[340px] sm:max-w-[300px]"
-  role="img"
-  aria-label="Mapa de Bolivia con punto de riesgo"
->
-  <defs>
-    <linearGradient id="boliviaGradientMinimal" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stopColor="#726E97" stopOpacity="0.96" />
-      <stop offset="100%" stopColor="#7698B3" stopOpacity="0.96" />
-    </linearGradient>
-  </defs>
-
-  {/* Silueta de Bolivia más precisa */}
-  <path
-    d="M105 15 L145 25 L165 55 L215 75 L210 115 L235 150 L200 185 L195 235 L155 250 L145 295 L100 285 L65 315 L35 275 L5 270 L25 220 L0 180 L30 150 L20 110 L50 80 L60 40 Z"
-    fill="url(#boliviaGradientMinimal)"
-  />
-
-  {/* Divisiones internas estilizadas */}
-  <path
-    d="M60 40 L110 100 L90 160 L40 160 M110 100 L165 25 M110 100 L185 140 L195 235 M90 160 L140 195 L145 295 M140 195 L200 185"
-    fill="none"
-    stroke="rgba(255,255,255,0.3)"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-  />
-
-  {/* Punto de riesgo (Ubicación central/Cochabamba-Santa Cruz) */}
-  <g className="animate-pulse">
-    <circle cx="125" cy="165" r="30" fill="#f59e0b" opacity="0.1" />
-    <circle cx="125" cy="165" r="18" fill="#f59e0b" opacity="0.2" />
-    <circle cx="125" cy="165" r="8" fill="#f59e0b" />
-  </g>
-</svg>
-                {/* Etiqueta flotante */}
-                <div
-                  className="absolute right-2 top-12 rounded-2xl border bg-white/80 px-4 py-3 text-left shadow-sm backdrop-blur-md sm:right-10"
-                  style={{ borderColor: 'rgba(114,110,151,0.12)' }}
-                >
-                  <p className="text-[11px] font-light text-gray-500">
-                    Zona detectada
-                  </p>
-                  <p className="text-sm font-semibold" style={{ color: '#1a1a2e' }}>
-                    Riesgo moderado
-                  </p>
+            {/* Legend */}
+            <div style={{ display:'flex', gap:'1rem', marginBottom:'0.75rem', flexWrap:'wrap' }}>
+              {(['alto','moderado','bajo'] as RiskLevel[]).map(level => (
+                <div key={level} style={{ display:'flex', alignItems:'center', gap:'0.4rem' }}>
+                  <div style={{ width:10, height:10, borderRadius:'50%', background:riskColor[level] }} />
+                  <span style={{ fontSize:'0.72rem', color:'#6b7280' }}>{riskLabel[level]}</span>
                 </div>
+              ))}
+            </div>
 
+            {/* Map container */}
+            <div style={{ borderRadius:18, overflow:'hidden', border:'1.5px solid rgba(114,110,151,0.15)', boxShadow:'0 4px 24px rgba(114,110,151,0.1)', height:340 }}>
+              <LeafletMap userPos={userPos} />
+            </div>
+
+            {/* Verify button */}
+            <div style={{ marginTop:'1.25rem', display:'flex', flexDirection:'column', gap:'1rem' }}>
+              <button
+                onClick={handleVerify}
+                disabled={geoState === 'loading' || geoState === 'found'}
+                style={{
+                  display:'inline-flex', alignItems:'center', justifyContent:'center', gap:'0.5rem',
+                  padding:'0.75rem 1.5rem', borderRadius:12, border:'none',
+                  cursor: geoState === 'loading' || geoState === 'found' ? 'default' : 'pointer',
+                  background: geoState === 'found'
+                    ? 'rgba(114,110,151,0.1)'
+                    : 'linear-gradient(135deg, #726E97, #7698B3)',
+                  color: geoState === 'found' ? '#726E97' : '#fff',
+                  fontSize:'0.875rem', fontWeight:600,
+                  opacity: geoState === 'loading' ? 0.7 : 1,
+                  transition:'opacity 0.2s',
+                }}
+              >
+                {geoState === 'loading' && <Loader2 size={16} className="spin-icon" />}
+                {(geoState === 'idle' || geoState === 'denied') && <MapPin size={16} />}
+                {geoState === 'found' && <ShieldCheck size={16} />}
+
+                {geoState === 'idle'    && 'Verificar alertas en mi zona'}
+                {geoState === 'loading' && 'Obteniendo ubicación…'}
+                {geoState === 'found'   && 'Alerta más cercana encontrada'}
+                {geoState === 'denied'  && 'Verificar alertas en mi zona'}
+              </button>
+
+              {/* Result card */}
+              {(geoState === 'found' || geoState === 'denied') && nearest && (
                 <div
-                  className="absolute bottom-8 left-2 rounded-2xl border bg-white/80 px-4 py-3 text-left shadow-sm backdrop-blur-md sm:left-8"
-                  style={{ borderColor: 'rgba(118,152,179,0.14)' }}
-                >
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="h-4 w-4" style={{ color: '#7698B3' }} />
-                    <p className="text-xs font-medium" style={{ color: '#726E97' }}>
-                      Monitoreo preventivo
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Pregunta debajo del mapa */}
-              <div className="mx-auto mt-2 max-w-lg text-center">
-                <h4
-                  className="text-xl font-semibold sm:text-2xl"
-                  style={{ color: '#1a1a2e' }}
-                >
-                  ¿Quieres saber si hay riesgo en tu zona?
-                </h4>
-
-                <p className="mx-auto mt-3 max-w-md text-sm font-light leading-6 text-gray-500">
-                  Consulta tu ubicación para recibir una recomendación
-                  preventiva personalizada.
-                </p>
-
-                <button
-                  type="button"
-                  onClick={() => setRiskChecked(true)}
-                  className="mt-6 inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium text-white transition duration-300 hover:-translate-y-0.5 hover:shadow-lg"
                   style={{
-                    background: 'linear-gradient(135deg, #726E97, #7698B3)',
-                    boxShadow: '0 14px 28px rgba(114,110,151,0.22)',
+                    borderRadius:14, padding:'1.1rem 1.25rem',
+                    background: riskBg[nearest.risk],
+                    border:`1.5px solid ${riskColor[nearest.risk]}35`,
+                    display:'flex', gap:'0.85rem', alignItems:'flex-start',
+                    animation:'fadeUp 0.35s ease both',
                   }}
                 >
-                  <MapPin className="h-4 w-4" />
-                  Confirmar ubicación
-                </button>
-
-                {riskChecked && (
-                  <div
-                    className="mx-auto mt-6 max-w-md rounded-3xl border bg-white/75 p-5 text-left shadow-sm backdrop-blur-md"
-                    style={{ borderColor: 'rgba(114,110,151,0.14)' }}
-                  >
-                    <div className="flex gap-3">
-                      <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
-
-                      <div>
-                        <p
-                          className="text-sm font-semibold"
-                          style={{ color: '#1a1a2e' }}
-                        >
-                          Hay riesgo preventivo por clima frío.
-                        </p>
-
-                        <p className="mt-1 text-sm font-light leading-6 text-gray-500">
-                          Abriga a los más pequeños, evita cambios bruscos de
-                          temperatura y revisa que sus vacunas estén al día.
-                        </p>
-
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs text-gray-500">
-                            <Thermometer
-                              className="h-3.5 w-3.5"
-                              style={{ color: '#7698B3' }}
-                            />
-                            Clima frío
-                          </span>
-
-                          <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs text-gray-500">
-                            <Syringe
-                              className="h-3.5 w-3.5"
-                              style={{ color: '#726E97' }}
-                            />
-                            Revisar vacunas
-                          </span>
-                        </div>
-                      </div>
+                  <AlertTriangle size={18} style={{ color:riskColor[nearest.risk], marginTop:1, flexShrink:0 }} />
+                  <div>
+                    <div style={{ display:'flex', alignItems:'center', gap:'0.5rem', marginBottom:'0.3rem', flexWrap:'wrap' }}>
+                      <span style={{ fontSize:'0.85rem', fontWeight:700, color:'#1a1a2e' }}>{nearest.city}</span>
+                      <span style={{ fontSize:'0.7rem', fontWeight:600, color:riskColor[nearest.risk], background:`${riskColor[nearest.risk]}18`, borderRadius:999, padding:'0.15rem 0.55rem' }}>
+                        {riskLabel[nearest.risk]}
+                      </span>
+                      <span style={{ fontSize:'0.75rem', color:'#9ca3af' }}>· {nearest.type}</span>
                     </div>
+                    <p style={{ fontSize:'0.8rem', fontWeight:300, color:'#374151', lineHeight:1.6, margin:0 }}>
+                      {nearest.message}
+                    </p>
+                    {geoState === 'denied' && (
+                      <p style={{ fontSize:'0.71rem', color:'#9ca3af', margin:'0.4rem 0 0', fontStyle:'italic' }}>
+                        Ubicación no disponible — mostrando La Paz como ejemplo.
+                      </p>
+                    )}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity:0; transform:translateY(10px); }
+          to   { opacity:1; transform:translateY(0); }
+        }
+        .spin-icon { animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+        .leaflet-popup-content-wrapper { border-radius:12px !important; box-shadow:0 4px 20px rgba(0,0,0,0.12) !important; }
+        .leaflet-popup-tip { display:none !important; }
+        @media (max-width: 768px) {
+          .ai-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   );
 }

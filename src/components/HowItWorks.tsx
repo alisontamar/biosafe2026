@@ -1,256 +1,202 @@
+import { QrCode, Syringe, Bell, BookOpen } from 'lucide-react';
 
-const pillars = [
+const features = [
   {
-    number: '01',
-    title: 'Identidad QR Dinámica',
-    description:
-      'Cada menor cuenta con un código QR único y encriptado en el smartphone de su tutor, eliminando la dependencia del carnet físico y agilizando el triaje.',
+    icon: QrCode,
     accent: '#726E97',
+    bg: 'rgba(114,110,151,0.08)',
+    title: 'Carnet QR digital',
+    description:
+      'Cada persona registrada en BioSafe recibe un código QR único. Muéstralo en cualquier centro de salud o farmacia y el personal de salud accede al historial de vacunación completo al instante.',
+    pills: ['Sin papeles que perder', 'Verificado y seguro', 'Funciona en todo el país'],
   },
   {
-    number: '02',
-    title: 'Registro Ágil Fast-Track',
-    description:
-      'El personal médico o farmacéutico escanea y registra la aplicación de dosis en segundos, optimizando los tiempos de atención y reduciendo errores manuales.',
+    icon: Syringe,
     accent: '#7698B3',
+    bg: 'rgba(118,152,179,0.08)',
+    title: 'Esquema PAI Bolivia completo',
+    description:
+      'Seguimos el Programa Ampliado de Inmunización oficial de Bolivia: BCG, Pentavalente, Rotavirus, SRP, Fiebre Amarilla y más. Siempre sabrás cuáles ya se aplicaron y cuáles faltan.',
+    pills: ['15+ vacunas oficiales', 'Historial con fecha y lote', 'Pendientes resaltadas por edad'],
   },
   {
-    number: '03',
-    title: 'Historial Clínico Seguro',
-    description:
-      'Información centralizada bajo arquitectura multi-tenant y encriptación de grado médico, garantizando que el historial esté siempre disponible y protegido.',
+    icon: Bell,
     accent: '#726E97',
+    bg: 'rgba(114,110,151,0.08)',
+    title: 'Alertas y recordatorios',
+    description:
+      'Te avisamos antes de que venza la próxima dosis. Además, BioSafe monitorea señales epidemiológicas en tu zona y genera alertas preventivas cuando detecta riesgo de brotes.',
+    pills: ['Recordatorios automáticos', 'Alertas epidemiológicas', 'Notificaciones a tiempo'],
   },
   {
-    number: '04',
-    title: 'Notificaciones Inteligentes',
-    description:
-      'Recordatorios automatizados enviados directamente al tutor antes de cada dosis, diseñados específicamente para reducir la tasa de abandono del esquema de vacunación.',
+    icon: BookOpen,
     accent: '#7698B3',
+    bg: 'rgba(118,152,179,0.08)',
+    title: 'Guías para padres',
+    description:
+      '¿Fiebre después de la vacuna? ¿El brazo duele? BioSafe incluye guías simples y confiables para que sepas qué esperar tras cada dosis y cuándo acudir al médico.',
+    pills: ['Qué esperar post-vacuna', 'Cómo tratar efectos leves', 'Señales de alerta'],
   },
 ];
 
-const styles = `
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap');
-
-  .hw-section {
-    padding: 6rem 1.5rem;
-    background: #fafafa;
-    font-family: 'DM Sans', sans-serif;
-  }
-
-  .hw-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .hw-heading {
-    text-align: center;
-    margin-bottom: 4rem;
-  }
-
-  .hw-eyebrow {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: #7698B3;
-    margin-bottom: 1rem;
-  }
-
-  .hw-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 400;
-    color: #1a1a2e;
-    line-height: 1.15;
-    margin: 0 0 1rem;
-  }
-
-  .hw-title em {
-    font-style: italic;
-    color: #726E97;
-  }
-
-  .hw-subtitle {
-    color: #9ca3af;
-    font-weight: 300;
-    font-size: 0.95rem;
-    max-width: 480px;
-    margin: 0 auto;
-    line-height: 1.7;
-  }
-
-  .hw-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.25rem;
-  }
-
-  @media (max-width: 1024px) {
-    .hw-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 600px) {
-    .hw-grid {
-      grid-template-columns: 1fr;
-    }
-    .hw-section {
-      padding: 4rem 1.25rem;
-    }
-  }
-
-  .hw-card {
-    position: relative;
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 2rem 1.75rem 2.25rem;
-    border: 2px solid #c4bfe8;
-    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
-    overflow: hidden;
-    cursor: default;
-  }
-
-  .hw-card:hover {
-    border-color: #726E97;
-    box-shadow: 0 16px 48px -8px rgba(114, 110, 151, 0.22);
-    transform: translateY(-4px);
-  }
-
-  .hw-card--blue {
-    border-color: #b3cfe0;
-  }
-
-  .hw-card--blue:hover {
-    border-color: #7698B3;
-    box-shadow: 0 16px 48px -8px rgba(118, 152, 179, 0.22);
-  }
-
-  .hw-card-bg {
-    position: absolute;
-    top: -1.5rem;
-    right: -0.75rem;
-    font-size: 6.5rem;
-    font-weight: 900;
-    line-height: 1;
-    color: #726E97;
-    opacity: 0.04;
-    user-select: none;
-    font-family: 'DM Serif Display', serif;
-    transition: opacity 0.25s ease;
-  }
-
-  .hw-card--blue .hw-card-bg {
-    color: #7698B3;
-  }
-
-  .hw-card:hover .hw-card-bg {
-    opacity: 0.07;
-  }
-
-  .hw-card-number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #726E9720, #726E9708);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    color: #726E97;
-    margin-bottom: 1.4rem;
-    border: 1px solid #726E9730;
-  }
-
-  .hw-card--blue .hw-card-number {
-    background: linear-gradient(135deg, #7698B320, #7698B308);
-    color: #7698B3;
-    border-color: #7698B330;
-  }
-
-  .hw-card-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #1a1a2e;
-    margin: 0 0 0.75rem;
-    line-height: 1.4;
-    padding-right: 1rem;
-  }
-
-  .hw-card-desc {
-    font-size: 0.85rem;
-    font-weight: 300;
-    color: #6b7280;
-    line-height: 1.75;
-    margin: 0;
-  }
-
-  .hw-card-line {
-    position: absolute;
-    bottom: 0;
-    left: 1.75rem;
-    right: 1.75rem;
-    height: 2px;
-    border-radius: 999px;
-    opacity: 0;
-    transition: opacity 0.25s ease;
-    background: linear-gradient(90deg, #726E97, transparent);
-  }
-
-  .hw-card--blue .hw-card-line {
-    background: linear-gradient(90deg, #7698B3, transparent);
-  }
-
-  .hw-card:hover .hw-card-line {
-    opacity: 1;
-  }
-`;
-
 export default function HowItWorks() {
   return (
-    <>
-      <style>{styles}</style>
-      <section id="como-funciona" className="hw-section">
-        <div className="hw-inner">
-          {/* Heading */}
-          <div className="hw-heading">
-            <span className="hw-eyebrow">Cómo Funciona</span>
-            <h2 className="hw-title">
-              Los <em>4 Pilares</em> de BioSafe
-            </h2>
-            <p className="hw-subtitle">
-              Una arquitectura diseñada desde cero para la inmunización segura, eficiente y conectada.
-            </p>
-          </div>
+    <section id="que-es" style={{ padding: '5rem 1.5rem', background: '#fafafa' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
-          {/* Pillars grid */}
-          <div className="hw-grid">
-            {pillars.map((pillar) => {
-              const isBlue = pillar.accent === '#7698B3';
-              return (
-                <div
-                  key={pillar.number}
-                  className={`hw-card${isBlue ? ' hw-card--blue' : ''}`}
-                >
-                  <span className="hw-card-bg">{pillar.number}</span>
-
-                  <div className="hw-card-number">{pillar.number}</div>
-
-                  <h3 className="hw-card-title">{pillar.title}</h3>
-                  <p className="hw-card-desc">{pillar.description}</p>
-
-                  <div className="hw-card-line" />
-                </div>
-              );
-            })}
-          </div>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+          <span
+            style={{
+              display: 'inline-block',
+              fontSize: '0.7rem',
+              fontWeight: 500,
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: '#7698B3',
+              marginBottom: '0.75rem',
+            }}
+          >
+            La aplicación
+          </span>
+          <h2
+            style={{
+              fontSize: 'clamp(1.9rem, 4.5vw, 3rem)',
+              fontWeight: 700,
+              color: '#1a1a2e',
+              lineHeight: 1.15,
+              margin: '0 0 1rem',
+            }}
+          >
+            ¿Qué es{' '}
+            <span style={{ color: '#726E97' }}>BioSafe</span>?
+          </h2>
+          <p
+            style={{
+              color: '#9ca3af',
+              fontWeight: 300,
+              fontSize: '0.95rem',
+              maxWidth: 500,
+              margin: '0 auto',
+              lineHeight: 1.7,
+            }}
+          >
+            Una app para padres y tutores que digitaliza el carnet de vacunación y conecta a las
+            familias con el sistema de salud boliviano.
+          </p>
         </div>
-      </section>
-    </>
+
+        {/* Feature grid */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '1.25rem',
+          }}
+        >
+          {features.map(({ icon: Icon, accent, bg, title, description, pills }) => (
+            <div
+              key={title}
+              style={{
+                background: '#ffffff',
+                borderRadius: 20,
+                padding: '2rem 1.75rem',
+                border: `1.5px solid ${accent}22`,
+                transition: 'border-color 0.25s, box-shadow 0.25s, transform 0.25s',
+                cursor: 'default',
+                position: 'relative',
+                overflow: 'hidden',
+              }}
+              onMouseEnter={e => {
+                const el = e.currentTarget as HTMLDivElement;
+                el.style.borderColor = accent + '66';
+                el.style.boxShadow = `0 16px 40px -8px ${accent}28`;
+                el.style.transform = 'translateY(-4px)';
+              }}
+              onMouseLeave={e => {
+                const el = e.currentTarget as HTMLDivElement;
+                el.style.borderColor = accent + '22';
+                el.style.boxShadow = 'none';
+                el.style.transform = 'translateY(0)';
+              }}
+            >
+              {/* Icon */}
+              <div
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 14,
+                  background: bg,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '1.25rem',
+                }}
+              >
+                <Icon size={22} style={{ color: accent }} />
+              </div>
+
+              <h3
+                style={{
+                  fontSize: '1.05rem',
+                  fontWeight: 700,
+                  color: '#1a1a2e',
+                  margin: '0 0 0.65rem',
+                  lineHeight: 1.35,
+                }}
+              >
+                {title}
+              </h3>
+
+              <p
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: 300,
+                  color: '#6b7280',
+                  lineHeight: 1.75,
+                  margin: '0 0 1.25rem',
+                }}
+              >
+                {description}
+              </p>
+
+              {/* Feature pills */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                {pills.map(pill => (
+                  <span
+                    key={pill}
+                    style={{
+                      fontSize: '0.72rem',
+                      fontWeight: 500,
+                      color: accent,
+                      background: bg,
+                      border: `1px solid ${accent}22`,
+                      borderRadius: 999,
+                      padding: '0.25rem 0.75rem',
+                    }}
+                  >
+                    {pill}
+                  </span>
+                ))}
+              </div>
+
+              {/* Bottom accent line */}
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: '1.75rem',
+                  right: '1.75rem',
+                  height: 2,
+                  borderRadius: 999,
+                  background: `linear-gradient(90deg, ${accent}, transparent)`,
+                  opacity: 0.35,
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
