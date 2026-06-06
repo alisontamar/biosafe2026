@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapPin, AlertTriangle, ShieldCheck, Bell, Loader2, TrendingDown, Globe, Thermometer } from 'lucide-react';
+import { MapPin, AlertTriangle, ShieldCheck, Bell, Loader2, TrendingDown, Globe, Thermometer, Droplets, Brain } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 type RiskLevel = 'alto' | 'moderado' | 'bajo';
 
@@ -11,6 +12,14 @@ interface AlertPoint {
   city: string;
   risk: RiskLevel;
   type: string;
+  message: string;
+}
+
+interface AIAlert {
+  risk: RiskLevel;
+  temperature: number;
+  rain: boolean;
+  title: string;
   message: string;
 }
 
@@ -133,38 +142,60 @@ const signals = [
 
 // ── Main section ─────────────────────────────────────────────────────────────
 export default function AISection() {
-  const [geoState, setGeoState] = useState<'idle' | 'loading' | 'found' | 'denied'>('idle');
-  const [userPos, setUserPos] = useState<[number, number] | null>(null);
-  const [nearest, setNearest] = useState<AlertPoint | null>(null);
+  const [geoState, setGeoState] = useState<'idle' | 'locating' | 'analyzing' | 'found'>('idle');
+  const [geoAvailable, setGeoAvailable] = useState(true);
+  const [userPos, setUserPos]   = useState<[number, number] | null>(null);
+  const [nearest, setNearest]   = useState<AlertPoint | null>(null);
+  const [alertData, setAlertData] = useState<AIAlert | null>(null);
+
+  const runAnalysis = async (lat: number, lng: number) => {
+    const closest = alertPoints.reduce((prev, curr) =>
+      haversineKm(lat, lng, curr.lat, curr.lng) <
+      haversineKm(lat, lng, prev.lat, prev.lng) ? curr : prev
+    );
+    setNearest(closest);
+    setGeoState('analyzing');
+
+    const { data, error } = await supabase.functions.invoke('health-advisor', {
+      body: { lat, lng },
+    });
+
+    if (!error && data && !data.error) {
+      setAlertData(data as AIAlert);
+    }
+    setGeoState('found');
+  };
 
   const handleVerify = () => {
     if (geoState === 'found') return;
-    setGeoState('loading');
+    setGeoState('locating');
+    setAlertData(null);
+    setGeoAvailable(true);
 
     if (!navigator.geolocation) {
-      setNearest(alertPoints[0]);
-      setGeoState('denied');
+      setGeoAvailable(false);
+      runAnalysis(-16.5, -68.15);
       return;
     }
 
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
-        const pos: [number, number] = [coords.latitude, coords.longitude];
-        setUserPos(pos);
-        const closest = alertPoints.reduce((prev, curr) =>
-          haversineKm(pos[0], pos[1], curr.lat, curr.lng) <
-          haversineKm(pos[0], pos[1], prev.lat, prev.lng) ? curr : prev
-        );
-        setNearest(closest);
-        setGeoState('found');
+        setUserPos([coords.latitude, coords.longitude]);
+        runAnalysis(coords.latitude, coords.longitude);
       },
       () => {
-        setNearest(alertPoints[0]);
-        setGeoState('denied');
+        setGeoAvailable(false);
+        runAnalysis(-16.5, -68.15);
       },
       { timeout: 8000 }
     );
   };
+
+  const isLoading = geoState === 'locating' || geoState === 'analyzing';
+  const isDone    = geoState === 'found';
+
+  const displayRisk: RiskLevel =
+    (alertData?.risk as RiskLevel) ?? nearest?.risk ?? 'bajo';
 
   return (
     <section
@@ -260,58 +291,93 @@ export default function AISection() {
             <div style={{ marginTop:'1.25rem', display:'flex', flexDirection:'column', gap:'1rem' }}>
               <button
                 onClick={handleVerify}
-                disabled={geoState === 'loading' || geoState === 'found'}
+                disabled={isLoading || isDone}
                 style={{
                   display:'inline-flex', alignItems:'center', justifyContent:'center', gap:'0.5rem',
                   padding:'0.75rem 1.5rem', borderRadius:12, border:'none',
-                  cursor: geoState === 'loading' || geoState === 'found' ? 'default' : 'pointer',
-                  background: geoState === 'found'
+                  cursor: isLoading || isDone ? 'default' : 'pointer',
+                  background: isDone
                     ? 'rgba(114,110,151,0.1)'
                     : 'linear-gradient(135deg, #726E97, #7698B3)',
-                  color: geoState === 'found' ? '#726E97' : '#fff',
+                  color: isDone ? '#726E97' : '#fff',
                   fontSize:'0.875rem', fontWeight:600,
-                  opacity: geoState === 'loading' ? 0.7 : 1,
+                  opacity: isLoading ? 0.7 : 1,
                   transition:'opacity 0.2s',
                 }}
               >
-                {geoState === 'loading' && <Loader2 size={16} className="spin-icon" />}
-                {(geoState === 'idle' || geoState === 'denied') && <MapPin size={16} />}
-                {geoState === 'found' && <ShieldCheck size={16} />}
+                {isLoading && <Loader2 size={16} className="spin-icon" />}
+                {!isLoading && !isDone && <MapPin size={16} />}
+                {isDone && <ShieldCheck size={16} />}
 
-                {geoState === 'idle'    && 'Verificar alertas en mi zona'}
-                {geoState === 'loading' && 'Obteniendo ubicación…'}
-                {geoState === 'found'   && 'Alerta más cercana encontrada'}
-                {geoState === 'denied'  && 'Verificar alertas en mi zona'}
+                {geoState === 'idle'      && 'Verificar alertas en mi zona'}
+                {geoState === 'locating'  && 'Obteniendo ubicación…'}
+                {geoState === 'analyzing' && 'Analizando con IA…'}
+                {geoState === 'found'     && 'Análisis completado'}
               </button>
 
               {/* Result card */}
-              {(geoState === 'found' || geoState === 'denied') && nearest && (
+              {isDone && nearest && (
                 <div
                   style={{
                     borderRadius:14, padding:'1.1rem 1.25rem',
-                    background: riskBg[nearest.risk],
-                    border:`1.5px solid ${riskColor[nearest.risk]}35`,
+                    background: riskBg[displayRisk],
+                    border:`1.5px solid ${riskColor[displayRisk]}35`,
                     display:'flex', gap:'0.85rem', alignItems:'flex-start',
                     animation:'fadeUp 0.35s ease both',
                   }}
                 >
-                  <AlertTriangle size={18} style={{ color:riskColor[nearest.risk], marginTop:1, flexShrink:0 }} />
-                  <div>
+                  <AlertTriangle size={18} style={{ color:riskColor[displayRisk], marginTop:1, flexShrink:0 }} />
+                  <div style={{ flex:1 }}>
+                    {/* City + badges */}
                     <div style={{ display:'flex', alignItems:'center', gap:'0.5rem', marginBottom:'0.3rem', flexWrap:'wrap' }}>
-                      <span style={{ fontSize:'0.85rem', fontWeight:700, color:'#1a1a2e' }}>{nearest.city}</span>
-                      <span style={{ fontSize:'0.7rem', fontWeight:600, color:riskColor[nearest.risk], background:`${riskColor[nearest.risk]}18`, borderRadius:999, padding:'0.15rem 0.55rem' }}>
-                        {riskLabel[nearest.risk]}
+                      <span style={{ fontSize:'0.85rem', fontWeight:700, color:'#1a1a2e' }}>
+                        {nearest.city}
                       </span>
-                      <span style={{ fontSize:'0.75rem', color:'#9ca3af' }}>· {nearest.type}</span>
+                      <span style={{ fontSize:'0.7rem', fontWeight:600, color:riskColor[displayRisk], background:`${riskColor[displayRisk]}18`, borderRadius:999, padding:'0.15rem 0.55rem' }}>
+                        {riskLabel[displayRisk]}
+                      </span>
+                      {alertData && (
+                        <>
+                          <span style={{ display:'inline-flex', alignItems:'center', gap:3, fontSize:'0.72rem', color:'#6b7280', background:'rgba(0,0,0,0.05)', borderRadius:999, padding:'0.15rem 0.5rem' }}>
+                            <Thermometer size={11} />
+                            {alertData.temperature}°C
+                          </span>
+                          <span style={{ display:'inline-flex', alignItems:'center', gap:3, fontSize:'0.72rem', color:'#6b7280', background:'rgba(0,0,0,0.05)', borderRadius:999, padding:'0.15rem 0.5rem' }}>
+                            <Droplets size={11} />
+                            {alertData.rain ? 'Con lluvia' : 'Sin lluvia'}
+                          </span>
+                        </>
+                      )}
                     </div>
-                    <p style={{ fontSize:'0.8rem', fontWeight:300, color:'#374151', lineHeight:1.6, margin:0 }}>
-                      {nearest.message}
-                    </p>
-                    {geoState === 'denied' && (
-                      <p style={{ fontSize:'0.71rem', color:'#9ca3af', margin:'0.4rem 0 0', fontStyle:'italic' }}>
-                        Ubicación no disponible — mostrando La Paz como ejemplo.
-                      </p>
+
+                    {/* AI title */}
+                    {alertData?.title && (
+                      <div style={{ display:'flex', alignItems:'center', gap:'0.35rem', marginBottom:'0.25rem' }}>
+                        <Brain size={12} style={{ color:'#726E97', flexShrink:0 }} />
+                        <p style={{ fontSize:'0.82rem', fontWeight:700, color:'#1a1a2e', margin:0 }}>
+                          {alertData.title}
+                        </p>
+                      </div>
                     )}
+
+                    {/* Message */}
+                    <p style={{ fontSize:'0.8rem', fontWeight:300, color:'#374151', lineHeight:1.6, margin:0 }}>
+                      {alertData?.message ?? nearest.message}
+                    </p>
+
+                    {/* Footer notes */}
+                    <div style={{ marginTop:'0.5rem', display:'flex', gap:'0.5rem', flexWrap:'wrap' }}>
+                      {alertData && (
+                        <span style={{ fontSize:'0.68rem', color:'#a5b4c3', fontStyle:'italic' }}>
+                          Generado con IA en tiempo real
+                        </span>
+                      )}
+                      {!geoAvailable && (
+                        <span style={{ fontSize:'0.68rem', color:'#9ca3af', fontStyle:'italic' }}>
+                          · Ubicación no disponible — usando {nearest.city} como referencia
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
