@@ -362,7 +362,7 @@ export default function AISection() {
 
                     {/* Message */}
                     <p style={{ fontSize:'0.8rem', fontWeight:300, color:'#374151', lineHeight:1.6, margin:0 }}>
-                      {alertData?.message ?? nearest.message}
+                      {alertData?.message || nearest.message}
                     </p>
 
                     {/* Footer notes */}

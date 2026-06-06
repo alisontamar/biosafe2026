@@ -26,7 +26,7 @@ Deno.serve(async (req) => {
     // ── Riesgo base por temperatura ───────────────────────────────────────────
     let risk = "bajo";
     if (temp <= 5) risk = "alto";
-    else if (temp <= 12) risk = "moderado";
+    else if (temp <= 16) risk = "moderado";
     if (rain && risk === "bajo") risk = "moderado";
 
     // ── Gemini ────────────────────────────────────────────────────────────────
@@ -35,7 +35,7 @@ Deno.serve(async (req) => {
     const climaContext =
       temp <= 5
         ? "Hace mucho frío. Recomienda abrigar bien a los niños con ropa de abrigo, evitar salir en las horas más frías y estar atento a síntomas respiratorios."
-        : temp <= 12
+        : temp <= 16
         ? "Hace frío moderado. Recomienda llevar abrigo, especialmente en niños pequeños, y mantener los espacios ventilados pero cálidos."
         : temp >= 30
         ? "Hace calor intenso. Recomienda mantener a los niños hidratados, evitar exposición al sol en horas pico y buscar lugares frescos."
@@ -82,8 +82,8 @@ MENSAJE: [recomendación preventiva clara, máximo 60 palabras, enfocada en niñ
 
     const title = titleMatch?.[1]?.trim() ?? `Riesgo ${risk} detectado`;
     const message =
-      messageMatch?.[1]?.trim() ??
-      rawText.trim() ??
+      messageMatch?.[1]?.trim() ||
+      rawText.trim() ||
       "Mantén las vacunas al día y consulta a tu médico ante síntomas.";
 
     return new Response(
