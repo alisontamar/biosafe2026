@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Download, LogIn, ArrowRight, QrCode, Bell, BookOpen } from 'lucide-react';
+import { Download, ArrowRight, QrCode, Bell, BookOpen, Sparkles } from 'lucide-react';
 
 interface AnimatedTitleProps {
   line: string;
@@ -132,7 +132,7 @@ export default function Hero() {
             <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
           </a>
           <a
-            href="#footer"
+            href="#ia"
             className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl text-sm font-medium transition-all duration-300 hover:-translate-y-1"
             style={{
               color: 'rgba(255,255,255,0.85)',
@@ -141,8 +141,8 @@ export default function Hero() {
               backdropFilter: 'blur(12px)',
             }}
           >
-            <LogIn className="w-4 h-4" />
-            Portal Profesional
+            <Sparkles className="w-4 h-4" />
+            Ver IA Predictiva
           </a>
         </div>
 

@@ -140,17 +140,17 @@ export function HomeView({ onNavigate }: { onNavigate?: (tab: string) => void })
     <div className="space-y-6 p-4 sm:p-6 bg-slate-50 min-h-screen">
       <h1 className="text-xl font-bold text-[#726E97]">Resumen general</h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5">
         <StatCard icon={UserRound}    title="Padres de familia registrados" value={stats.tutores} detail="Registros activos"       color="purple" />
         <StatCard icon={Baby}         title="Niños(as) 0-5 años"            value={stats.ninos}   detail="En seguimiento local"    color="green"  />
         <StatCard icon={ShieldCheck}  title="Esquemas Completos"            value={stats.cobertura} detail="Estimación actual"     color="blue"   />
         <StatCard icon={AlertTriangle} title="Alertas Activas"              value={stats.alertas} detail="Emitidas por la IA"      color="red"    />
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div className="xl:col-span-2 bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-100 p-5 sm:p-6">
           <h2 className="font-bold text-slate-900 mb-5">Seguimiento de vacunación</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-[180px_1fr] gap-6 items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-[160px_1fr] gap-5 items-center">
             <div className="flex flex-col items-center gap-1">
               <div className="relative w-28 h-28">
                 <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
@@ -167,28 +167,25 @@ export function HomeView({ onNavigate }: { onNavigate?: (tab: string) => void })
               <p className="text-xs text-slate-400">Población protegida</p>
             </div>
 
-            <div className="overflow-x-auto">
+            <div>
               <p className="text-sm font-semibold text-slate-700 mb-3">Próximas dosis pendientes</p>
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="text-left text-slate-400 border-b">
-                    <th className="pb-2 font-medium">Paciente</th>
-                    <th className="pb-2 font-medium">Vacuna / Dosis</th>
-                    <th className="pb-2 font-medium text-right">Vence</th>
-                  </tr>
-                </thead>
-                <tbody className="text-slate-700">
-                  {pendientes.length > 0 ? pendientes.map((p, i) => (
-                    <tr key={i} className="border-b border-slate-50">
-                      <td className="py-2.5 font-medium">{p.pacientes?.nombre_completo || 'Desconocido'}</td>
-                      <td className="py-2.5">{p.cat_vacunas_oficiales?.nombre_enfermedad} {p.cat_vacunas_oficiales?.dosis_numero}</td>
-                      <td className="py-2.5 text-right text-red-500 font-medium">Vence: {formatFechaCorta(p.fecha_vencimiento_proxima)}</td>
-                    </tr>
-                  )) : (
-                    <tr><td colSpan={3} className="py-4 text-center text-slate-400 text-xs">No hay dosis pendientes programadas en este centro.</td></tr>
-                  )}
-                </tbody>
-              </table>
+              {pendientes.length > 0 ? (
+                <div className="space-y-2">
+                  {pendientes.map((p, i) => (
+                    <div key={i} className="flex items-center justify-between gap-3 py-2 border-b border-slate-50 last:border-0">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-slate-800 truncate">{p.pacientes?.nombre_completo || "Desconocido"}</p>
+                        <p className="text-xs text-slate-400 truncate">{p.cat_vacunas_oficiales?.nombre_enfermedad} — {p.cat_vacunas_oficiales?.dosis_numero}</p>
+                      </div>
+                      <span className="text-xs text-red-500 font-semibold shrink-0 bg-red-50 px-2 py-1 rounded-lg">
+                        {formatFechaCorta(p.fecha_vencimiento_proxima)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="py-4 text-center text-slate-400 text-xs">No hay dosis pendientes en este centro.</p>
+              )}
             </div>
           </div>
         </div>
@@ -229,7 +226,7 @@ export function HomeView({ onNavigate }: { onNavigate?: (tab: string) => void })
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <QuickVaccinationCard onNavigate={onNavigate} />
         
         <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
