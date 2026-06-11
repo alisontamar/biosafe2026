@@ -147,7 +147,7 @@ export default function AdminDashboard() {
   const filteredMenu = getFilteredMenu();
 
   return (
-    <div className="min-h-screen bg-[#F4F6F8] text-slate-800 flex">
+    <div className="h-screen overflow-hidden bg-[#F4F6F8] text-slate-800 flex">
 
       {/* Overlay para mobile — tapa el fondo cuando el drawer está abierto */}
       {sidebarOpen && (
