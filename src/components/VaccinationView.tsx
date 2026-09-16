@@ -577,7 +577,6 @@ export default function VaccinationView() {
 
     const vaccinatedIds = new Set((vaccinated ?? []).map((v: any) => v.id_paciente));
 
-    const hoy = new Date();
     const pending = (allPatients ?? []).filter((p) => {
       const ageMonths = calcAgeMonths(p.fecha_nacimiento);
       return ageMonths >= min && ageMonths <= max && !vaccinatedIds.has(p.id_paciente);

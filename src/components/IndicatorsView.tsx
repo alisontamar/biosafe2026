@@ -115,7 +115,6 @@ export function IndicatorsView() {
         .eq("id_usuario", session.user.id)
         .single();
 
-      const estabId = profile?.id_establecimiento as string | null;
       const estData = profile?.establecimientos as any;
       const nombreEst = Array.isArray(estData)
         ? estData[0]?.nombre_establecimiento
@@ -271,26 +270,28 @@ export function IndicatorsView() {
       setDropData(dropArr);
 
       // ── Epidemiological alerts ───────────────────────────────────────────────
+      // "alertas_epidemiologicas_ia" es regional (departamento/municipio), no
+      // tiene columna de establecimiento propia.
       const { count: cntAlertas } = await supabase
         .from("alertas_epidemiologicas_ia")
-        .select("*", { count: "exact", head: true });
+        .select("*", { count: "exact", head: true })
+        .eq("activa", true);
       setTotalAlertas(cntAlertas ?? 0);
 
-      let alertQuery = supabase
+      const { data: alertasData } = await supabase
         .from("alertas_epidemiologicas_ia")
-        .select("titulo_riesgo, insight_texto, datos_clima_oms")
-        .order("fecha_creacion", { ascending: false })
+        .select("titulo, resumen, nivel")
+        .eq("activa", true)
+        .order("fecha_generacion", { ascending: false })
         .limit(5);
-      if (estabId) alertQuery = alertQuery.eq("id_establecimiento", estabId);
 
-      const { data: alertasData } = await alertQuery;
       if (alertasData && alertasData.length > 0) {
         setAlertsList(alertasData.map(a => {
-          const { color, bg, level } = resolveAlertStyle(a.titulo_riesgo, a.datos_clima_oms);
-          const preview = (a.insight_texto ?? "").substring(0, 100);
+          const { color, bg, level } = resolveAlertStyle(a.titulo, { nivel: a.nivel });
+          const preview = (a.resumen ?? "").substring(0, 100);
           return {
             color, bg, level,
-            text: `${a.titulo_riesgo} — ${preview}${preview.length >= 100 ? "…" : ""}`,
+            text: `${a.titulo} — ${preview}${preview.length >= 100 ? "…" : ""}`,
           };
         }));
       } else {

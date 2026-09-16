@@ -56,8 +56,7 @@ function QuickVaccinationCard({ onNavigate }: { onNavigate?: (tab: string) => vo
 // ── HomeView (main) ───────────────────────────────────────────────────────────
 export function HomeView({ onNavigate }: { onNavigate?: (tab: string) => void }) {
   const [loading, setLoading] = useState(true);
-  const [idEstablecimiento, setIdEstablecimiento] = useState<string | null>(null);
-  
+
   const [stats, setStats] = useState({ tutores: 0, ninos: 0, cobertura: "0%", alertas: 0 });
   const [pendientes, setPendientes] = useState<any[]>([]);
   const [alertaReciente, setAlertaReciente] = useState<any>(null);
@@ -79,20 +78,41 @@ export function HomeView({ onNavigate }: { onNavigate?: (tab: string) => void })
         .single();
       
       const estabId = profile?.id_establecimiento;
-      setIdEstablecimiento(estabId);
 
       const { count: countTutores } = await supabase.from('usuarios').select('*', { count: 'exact', head: true }).eq('rol', 'Tutor_PersonaNormal');
 
       const hace5Anios = new Date();
       hace5Anios.setFullYear(hace5Anios.getFullYear() - 5);
-      
-      let queryNinos = supabase.from('pacientes').select('*', { count: 'exact', head: true }).gte('fecha_nacimiento', hace5Anios.toISOString().split('T')[0]);
-      if (estabId) queryNinos = queryNinos.eq('id_establecimiento_registro', estabId);
-      const { count: countNinos } = await queryNinos;
 
-      let queryAlertas = supabase.from('alertas_epidemiologicas_ia').select('*', { count: 'exact', head: true });
-      if (estabId) queryAlertas = queryAlertas.eq('id_establecimiento', estabId);
-      const { count: countAlertas } = await queryAlertas;
+      // "pacientes" no tiene columna de establecimiento propia: se filtra
+      // vía id_tutor_registro -> usuarios.id_establecimiento
+      let countNinos = 0;
+      if (estabId) {
+        const { data: tutoresEst } = await supabase
+          .from('usuarios')
+          .select('id_usuario')
+          .eq('id_establecimiento', estabId);
+        const tutorIds = tutoresEst?.map(u => u.id_usuario) ?? [];
+        if (tutorIds.length > 0) {
+          const { count } = await supabase
+            .from('pacientes')
+            .select('*', { count: 'exact', head: true })
+            .gte('fecha_nacimiento', hace5Anios.toISOString().split('T')[0])
+            .in('id_tutor_registro', tutorIds);
+          countNinos = count || 0;
+        }
+      } else {
+        const { count } = await supabase
+          .from('pacientes')
+          .select('*', { count: 'exact', head: true })
+          .gte('fecha_nacimiento', hace5Anios.toISOString().split('T')[0]);
+        countNinos = count || 0;
+      }
+
+      const { count: countAlertas } = await supabase
+        .from('alertas_epidemiologicas_ia')
+        .select('*', { count: 'exact', head: true })
+        .eq('activa', true);
 
       const { data: dosisData } = await supabase
         .from('dosis_aplicadas')
@@ -106,9 +126,12 @@ export function HomeView({ onNavigate }: { onNavigate?: (tab: string) => void })
         .order('fecha_vencimiento_proxima', { ascending: true })
         .limit(4);
 
-      let queryAlertaIA = supabase.from('alertas_epidemiologicas_ia').select('*').order('fecha_creacion', { ascending: false }).limit(1);
-      if (estabId) queryAlertaIA = queryAlertaIA.eq('id_establecimiento', estabId);
-      const { data: alertaIAData } = await queryAlertaIA;
+      const { data: alertaIAData } = await supabase
+        .from('alertas_epidemiologicas_ia')
+        .select('*')
+        .eq('activa', true)
+        .order('fecha_generacion', { ascending: false })
+        .limit(1);
 
       setStats({
         tutores: countTutores || 0,
@@ -194,12 +217,12 @@ export function HomeView({ onNavigate }: { onNavigate?: (tab: string) => void })
           <div>
             <div className="flex items-center justify-between mb-2">
               <h2 className="font-bold text-red-600 text-sm">Alertas epidemiológicas (IA)</h2>
-              {alertaReciente && <span className="text-[10px] px-2 py-1 rounded-full bg-white text-red-500 border border-red-200 font-bold uppercase">{alertaReciente.nivel_riesgo || 'ALERTA'}</span>}
+              {alertaReciente && <span className="text-[10px] px-2 py-1 rounded-full bg-white text-red-500 border border-red-200 font-bold uppercase">{alertaReciente.nivel || 'ALERTA'}</span>}
             </div>
             {alertaReciente ? (
               <>
-                <p className="text-xs text-red-500 font-semibold text-right">{alertaReciente.titulo_riesgo}<br /><span className="font-normal">Notificación Reciente</span></p>
-                <p className="text-[10px] text-red-400 mt-2 italic leading-tight text-right line-clamp-3">{alertaReciente.insight_texto}</p>
+                <p className="text-xs text-red-500 font-semibold text-right">{alertaReciente.titulo}<br /><span className="font-normal">Notificación Reciente</span></p>
+                <p className="text-[10px] text-red-400 mt-2 italic leading-tight text-right line-clamp-3">{alertaReciente.resumen}</p>
               </>
             ) : (
               <p className="text-xs text-slate-500 text-center mt-6">No hay alertas epidemiológicas activas en tu región en este momento.</p>
