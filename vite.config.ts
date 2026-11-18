@@ -13,6 +13,12 @@ export default defineConfig({
     globals: true,
     setupFiles: './src/test/setup.ts',
     css: false,
+    // Valores falsos para que los tests no dependan de un .env (p. ej. en Jenkins/CI)
+    env: {
+      VITE_SUPABASE_URL: 'http://localhost:54321',
+      VITE_SUPABASE_PUBLISHABLE_KEY: 'test-publishable-key',
+      VITE_SUPABASE_SERVICE_ROLE_KEY: 'test-service-key',
+    },
     testTimeout: 20000,
     coverage: {
       provider: 'v8',

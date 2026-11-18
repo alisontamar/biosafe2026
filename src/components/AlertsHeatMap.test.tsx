@@ -23,6 +23,8 @@ const h = vi.hoisted(() => {
 });
 vi.mock('leaflet', () => ({ default: h.L }));
 vi.mock('leaflet/dist/leaflet.css', () => ({}));
+// AlertsHeatMap importa AlertsView, que importa el cliente de Supabase: se simula para no necesitar claves.
+vi.mock('../lib/supabase', async () => (await import('../test/supabaseMock')).moduleMock);
 
 import AlertsHeatMap from './AlertsHeatMap';
 
