@@ -9,6 +9,7 @@ import { HomeView } from "./HomeView";
 import PatientsView from "./PatientsView";
 import VaccinationView from "./VaccinationView";
 import AlertsView from "./AlertsView";
+import AlertBell from "./AlertBell";
 import { ReportsView } from "./ReportsView";
 import SettingsView from "./SettingsView";
 import { IndicatorsView } from "./IndicatorsView";
@@ -134,8 +135,8 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F4F6F8] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#726E97]"></div>
+      <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#A280B9]"></div>
       </div>
     );
   }
@@ -147,7 +148,7 @@ export default function AdminDashboard() {
   const filteredMenu = getFilteredMenu();
 
   return (
-    <div className="h-screen overflow-hidden bg-[#F4F6F8] text-slate-800 flex">
+    <div className="h-screen overflow-hidden bg-[#F8F9FA] text-slate-800 flex">
 
       {/* Overlay para mobile — tapa el fondo cuando el drawer está abierto */}
       {sidebarOpen && (
@@ -160,7 +161,7 @@ export default function AdminDashboard() {
       {/* Sidebar — fijo en desktop, drawer deslizable en mobile */}
       <aside
         className={`
-          fixed top-0 left-0 h-full w-[260px] bg-[#726E97] text-white flex flex-col p-4 z-30
+          fixed top-0 left-0 h-full w-[260px] bg-[#A280B9] text-white flex flex-col p-4 z-30
           transform transition-transform duration-300 ease-in-out
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           md:relative md:translate-x-0 md:flex
@@ -170,7 +171,7 @@ export default function AdminDashboard() {
         <div className="flex items-center justify-between px-2 mb-10 mt-2">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-lg">
-              <Plus className="w-6 h-6 text-[#726E97]" />
+              <Plus className="w-6 h-6 text-[#A280B9]" />
             </div>
             <span className="text-2xl font-bold tracking-tight">BioSafe</span>
           </div>
@@ -233,7 +234,10 @@ export default function AdminDashboard() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#726E97] flex items-center justify-center text-white text-xs font-bold shrink-0">
+            {getFilteredMenu().some((m) => m.id === "alertas") && (
+              <AlertBell onVerTodas={() => handleNavClick("alertas")} />
+            )}
+            <div className="w-8 h-8 rounded-full bg-[#A280B9] flex items-center justify-center text-white text-xs font-bold shrink-0">
               {userData ? getInitials(userData.nombre) : 'U'}
             </div>
             <div className="hidden sm:flex flex-col">
@@ -246,7 +250,7 @@ export default function AdminDashboard() {
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#F4F6F8]">
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#F8F9FA]">
           <div className="max-w-6xl mx-auto">
             {renderView()}
           </div>

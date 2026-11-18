@@ -99,10 +99,10 @@ function LeafletMap({ userPos }: { userPos: [number, number] | null }) {
 
       circle.bindPopup(`
         <div style="min-width:170px;font-family:system-ui,sans-serif;">
-          <p style="font-weight:700;font-size:0.85rem;margin:0 0 4px;color:#1a1a2e;">${pt.city}</p>
+          <p style="font-weight:700;font-size:0.85rem;margin:0 0 4px;color:#402B52;">${pt.city}</p>
           <span style="display:inline-block;font-size:0.68rem;font-weight:600;color:${riskColor[pt.risk]};background:${riskBg[pt.risk]};border-radius:999px;padding:2px 8px;margin-bottom:6px;">${riskLabel[pt.risk]}</span>
-          <p style="font-size:0.78rem;font-weight:500;color:#374151;margin:0 0 4px;">${pt.type}</p>
-          <p style="font-size:0.74rem;color:#6b7280;margin:0;line-height:1.5;">${pt.message}</p>
+          <p style="font-size:0.78rem;font-weight:500;color:#553B5E;margin:0 0 4px;">${pt.type}</p>
+          <p style="font-size:0.74rem;color:#7698B3;margin:0;line-height:1.5;">${pt.message}</p>
         </div>
       `, { maxWidth: 220 });
     });
@@ -125,7 +125,7 @@ function LeafletMap({ userPos }: { userPos: [number, number] | null }) {
       weight: 3,
     })
       .addTo(mapRef.current)
-      .bindPopup('<p style="font-size:0.82rem;font-weight:600;margin:0;color:#1a1a2e;">📍 Tu ubicación</p>');
+      .bindPopup('<p style="font-size:0.82rem;font-weight:600;margin:0;color:#402B52;">📍 Tu ubicación</p>');
 
     mapRef.current.flyTo(userPos, 10, { duration: 1.5 });
   }, [userPos]);
@@ -202,13 +202,13 @@ export default function AISection() {
       id="ia"
       style={{
         padding: '5rem 1.5rem',
-        background: 'linear-gradient(180deg, #fbfbfd 0%, #f8f7fc 50%, #eef2f7 100%)',
+        background: '#F8F9FA',
         position: 'relative',
         overflow: 'hidden',
       }}
     >
       {/* Decorative blobs */}
-      <div style={{ position:'absolute', top:-80, right:-60, width:300, height:300, borderRadius:'50%', background:'#726E97', opacity:0.06, filter:'blur(60px)', pointerEvents:'none' }} />
+      <div style={{ position:'absolute', top:-80, right:-60, width:300, height:300, borderRadius:'50%', background:'#A280B9', opacity:0.06, filter:'blur(60px)', pointerEvents:'none' }} />
       <div style={{ position:'absolute', bottom:-60, left:-40, width:260, height:260, borderRadius:'50%', background:'#7698B3', opacity:0.07, filter:'blur(50px)', pointerEvents:'none' }} />
 
       <div style={{ maxWidth:1100, margin:'0 auto', position:'relative' }}>
@@ -218,11 +218,11 @@ export default function AISection() {
           <span style={{ display:'inline-block', fontSize:'0.7rem', fontWeight:500, letterSpacing:'0.22em', textTransform:'uppercase', color:'#7698B3', marginBottom:'0.75rem' }}>
             Inteligencia preventiva
           </span>
-          <h2 style={{ fontSize:'clamp(1.9rem, 4.5vw, 3rem)', fontWeight:700, color:'#1a1a2e', lineHeight:1.15, margin:'0 0 1rem' }}>
+          <h2 style={{ fontSize:'clamp(1.9rem, 4.5vw, 3rem)', fontWeight:700, color:'#402B52', lineHeight:1.15, margin:'0 0 1rem' }}>
             Alertas epidemiológicas{' '}
-            <span style={{ color:'#726E97', fontStyle:'italic', fontWeight:300 }}>en tu zona</span>
+            <span style={{ color:'#A280B9', fontStyle:'italic', fontWeight:300 }}>en tu zona</span>
           </h2>
-          <p style={{ color:'#9ca3af', fontWeight:300, fontSize:'0.95rem', maxWidth:500, margin:'0 auto', lineHeight:1.7 }}>
+          <p style={{ color:'#7698B3', fontWeight:300, fontSize:'0.95rem', maxWidth:500, margin:'0 auto', lineHeight:1.7 }}>
             BioSafe monitorea señales de salud pública y te notifica si hay un riesgo preventivo
             cerca de tu familia — antes de que el brote se propague.
           </p>
@@ -235,10 +235,10 @@ export default function AISection() {
         >
           {/* LEFT */}
           <div>
-            <h3 style={{ fontSize:'1.25rem', fontWeight:700, color:'#1a1a2e', marginBottom:'0.5rem', marginTop:0 }}>
+            <h3 style={{ fontSize:'1.25rem', fontWeight:700, color:'#402B52', marginBottom:'0.5rem', marginTop:0 }}>
               La app analiza señales reales para protegerte
             </h3>
-            <p style={{ fontSize:'0.875rem', fontWeight:300, color:'#6b7280', lineHeight:1.75, marginBottom:'1.75rem' }}>
+            <p style={{ fontSize:'0.875rem', fontWeight:300, color:'#7698B3', lineHeight:1.75, marginBottom:'1.75rem' }}>
               El sistema cruza datos de vacunación, condiciones climáticas y alertas sanitarias
               oficiales para generar notificaciones preventivas personalizadas para cada zona del país.
             </p>
@@ -247,19 +247,19 @@ export default function AISection() {
               {signals.map(({ icon: Icon, title, text }) => (
                 <div key={title} style={{ display:'flex', gap:'0.85rem', alignItems:'flex-start' }}>
                   <div style={{ width:36, height:36, borderRadius:10, background:'rgba(114,110,151,0.09)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                    <Icon size={16} style={{ color:'#726E97' }} />
+                    <Icon size={16} style={{ color:'#A280B9' }} />
                   </div>
                   <div>
-                    <p style={{ fontSize:'0.875rem', fontWeight:600, color:'#1a1a2e', margin:'0 0 0.2rem' }}>{title}</p>
-                    <p style={{ fontSize:'0.82rem', fontWeight:300, color:'#6b7280', lineHeight:1.65, margin:0 }}>{text}</p>
+                    <p style={{ fontSize:'0.875rem', fontWeight:600, color:'#402B52', margin:'0 0 0.2rem' }}>{title}</p>
+                    <p style={{ fontSize:'0.82rem', fontWeight:300, color:'#7698B3', lineHeight:1.65, margin:0 }}>{text}</p>
                   </div>
                 </div>
               ))}
             </div>
 
             <div style={{ display:'flex', alignItems:'flex-start', gap:'0.75rem', padding:'1rem 1.25rem', borderLeft:'3px solid #7698B3', background:'rgba(118,152,179,0.06)', borderRadius:'0 12px 12px 0' }}>
-              <Bell size={15} style={{ color:'#726E97', marginTop:2, flexShrink:0 }} />
-              <p style={{ fontSize:'0.82rem', fontWeight:300, color:'#6b7280', lineHeight:1.65, margin:0 }}>
+              <Bell size={15} style={{ color:'#A280B9', marginTop:2, flexShrink:0 }} />
+              <p style={{ fontSize:'0.82rem', fontWeight:300, color:'#7698B3', lineHeight:1.65, margin:0 }}>
                 Las notificaciones llegan directamente a tu celular. Cuando BioSafe detecta una
                 alerta en tu zona, recibes un aviso con recomendaciones específicas para tu familia.
               </p>
@@ -277,7 +277,7 @@ export default function AISection() {
               {(['alto','moderado','bajo'] as RiskLevel[]).map(level => (
                 <div key={level} style={{ display:'flex', alignItems:'center', gap:'0.4rem' }}>
                   <div style={{ width:10, height:10, borderRadius:'50%', background:riskColor[level] }} />
-                  <span style={{ fontSize:'0.72rem', color:'#6b7280' }}>{riskLabel[level]}</span>
+                  <span style={{ fontSize:'0.72rem', color:'#7698B3' }}>{riskLabel[level]}</span>
                 </div>
               ))}
             </div>
@@ -298,8 +298,8 @@ export default function AISection() {
                   cursor: isLoading || isDone ? 'default' : 'pointer',
                   background: isDone
                     ? 'rgba(114,110,151,0.1)'
-                    : 'linear-gradient(135deg, #726E97, #7698B3)',
-                  color: isDone ? '#726E97' : '#fff',
+                    : '#A280B9',
+                  color: isDone ? '#A280B9' : '#fff',
                   fontSize:'0.875rem', fontWeight:600,
                   opacity: isLoading ? 0.7 : 1,
                   transition:'opacity 0.2s',
@@ -330,7 +330,7 @@ export default function AISection() {
                   <div style={{ flex:1 }}>
                     {/* City + badges */}
                     <div style={{ display:'flex', alignItems:'center', gap:'0.5rem', marginBottom:'0.3rem', flexWrap:'wrap' }}>
-                      <span style={{ fontSize:'0.85rem', fontWeight:700, color:'#1a1a2e' }}>
+                      <span style={{ fontSize:'0.85rem', fontWeight:700, color:'#402B52' }}>
                         {nearest.city}
                       </span>
                       <span style={{ fontSize:'0.7rem', fontWeight:600, color:riskColor[displayRisk], background:`${riskColor[displayRisk]}18`, borderRadius:999, padding:'0.15rem 0.55rem' }}>
@@ -338,11 +338,11 @@ export default function AISection() {
                       </span>
                       {alertData && (
                         <>
-                          <span style={{ display:'inline-flex', alignItems:'center', gap:3, fontSize:'0.72rem', color:'#6b7280', background:'rgba(0,0,0,0.05)', borderRadius:999, padding:'0.15rem 0.5rem' }}>
+                          <span style={{ display:'inline-flex', alignItems:'center', gap:3, fontSize:'0.72rem', color:'#7698B3', background:'rgba(0,0,0,0.05)', borderRadius:999, padding:'0.15rem 0.5rem' }}>
                             <Thermometer size={11} />
                             {alertData.temperature}°C
                           </span>
-                          <span style={{ display:'inline-flex', alignItems:'center', gap:3, fontSize:'0.72rem', color:'#6b7280', background:'rgba(0,0,0,0.05)', borderRadius:999, padding:'0.15rem 0.5rem' }}>
+                          <span style={{ display:'inline-flex', alignItems:'center', gap:3, fontSize:'0.72rem', color:'#7698B3', background:'rgba(0,0,0,0.05)', borderRadius:999, padding:'0.15rem 0.5rem' }}>
                             <Droplets size={11} />
                             {alertData.rain ? 'Con lluvia' : 'Sin lluvia'}
                           </span>
@@ -353,15 +353,15 @@ export default function AISection() {
                     {/* AI title */}
                     {alertData?.title && (
                       <div style={{ display:'flex', alignItems:'center', gap:'0.35rem', marginBottom:'0.25rem' }}>
-                        <Brain size={12} style={{ color:'#726E97', flexShrink:0 }} />
-                        <p style={{ fontSize:'0.82rem', fontWeight:700, color:'#1a1a2e', margin:0 }}>
+                        <Brain size={12} style={{ color:'#A280B9', flexShrink:0 }} />
+                        <p style={{ fontSize:'0.82rem', fontWeight:700, color:'#402B52', margin:0 }}>
                           {alertData.title}
                         </p>
                       </div>
                     )}
 
                     {/* Message */}
-                    <p style={{ fontSize:'0.8rem', fontWeight:300, color:'#374151', lineHeight:1.6, margin:0 }}>
+                    <p style={{ fontSize:'0.8rem', fontWeight:300, color:'#553B5E', lineHeight:1.6, margin:0 }}>
                       {alertData?.message || nearest.message}
                     </p>
 
@@ -373,7 +373,7 @@ export default function AISection() {
                         </span>
                       )}
                       {!geoAvailable && (
-                        <span style={{ fontSize:'0.68rem', color:'#9ca3af', fontStyle:'italic' }}>
+                        <span style={{ fontSize:'0.68rem', color:'#7698B3', fontStyle:'italic' }}>
                           · Ubicación no disponible — usando {nearest.city} como referencia
                         </span>
                       )}

@@ -47,7 +47,7 @@ function AnimatedTitle({ line, className, style, globalOffset = 0 }: AnimatedTit
                 : `letterDrop 0.6s cubic-bezier(.34,1.56,.64,1) ${(globalOffset + i) * 45}ms both`,
               transition: doneAnimating[i] ? 'transform 0.3s cubic-bezier(.34,1.56,.64,1), color 0.3s ease' : undefined,
               transform: doneAnimating[i] && hovered === i ? 'translateY(-8px) scale(1.18) rotate(-4deg)' : 'none',
-              color: doneAnimating[i] && hovered === i ? '#c4b5fd' : 'inherit',
+              color: doneAnimating[i] && hovered === i ? '#CDB6DC' : 'inherit',
             }}
           >
             {char}
@@ -84,12 +84,12 @@ export default function Hero() {
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(160deg, rgba(114,110,151,0.6) 0%, rgba(22,18,40,0.72) 50%, rgba(118,152,179,0.45) 100%)',
+          background: 'rgba(64,43,82,0.62)',
         }}
       />
       <div
         className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none"
-        style={{ background: 'linear-gradient(to top, rgba(10,8,20,0.75), transparent)' }}
+        style={{ background: 'rgba(64,43,82,0.35)' }}
       />
 
       <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto w-full pt-10 pb-16 sm:py-0">
@@ -100,7 +100,7 @@ export default function Hero() {
         >
           <AnimatedTitle line={LINE1} globalOffset={0} />
           <br />
-          <span className="font-semibold" style={{ color: '#c4b5fd' }}>
+          <span className="font-semibold" style={{ color: '#CDB6DC' }}>
             <AnimatedTitle line={LINE2} globalOffset={LINE1.length} />
           </span>
           <br />
@@ -125,7 +125,7 @@ export default function Hero() {
           <a
             href="#red"
             className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl text-sm font-medium text-white transition-all duration-300 hover:-translate-y-1"
-            style={{ background: 'linear-gradient(135deg, #726E97, #5d5a7a)', boxShadow: '0 4px 24px rgba(114,110,151,0.5)' }}
+            style={{ background: '#A280B9', boxShadow: '0 4px 24px rgba(114,110,151,0.5)' }}
           >
             <Download className="w-4 h-4" />
             Descarga la App
@@ -163,7 +163,7 @@ export default function Hero() {
                 whiteSpace: 'nowrap',
               }}
             >
-              <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#c4b5fd' }} />
+              <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#CDB6DC' }} />
               {label}
             </div>
           ))}
@@ -182,7 +182,7 @@ export default function Hero() {
       >
         <div
           className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-          style={{ background: 'linear-gradient(135deg, #726E97, #7698B3)' }}
+          style={{ background: '#A280B9' }}
         >
           <span className="text-white text-[9px] font-bold tracking-wider">QR</span>
         </div>

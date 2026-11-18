@@ -327,7 +327,7 @@ export function ReportsView() {
       title:  "Consolidado Mensual",
       desc:   "Resumen de todas las dosis aplicadas en el período, agrupadas por vacuna y número de dosis con lotes.",
       action: generarConsolidado,
-      accent: "text-[#726E97] bg-purple-50",
+      accent: "text-[#A280B9] bg-[#F3ECF8]",
     },
     {
       id:     "cobertura",
@@ -349,7 +349,7 @@ export function ReportsView() {
 
   return (
     <div className="space-y-6 p-4 sm:p-6">
-      <h1 className="text-2xl font-bold text-[#726E97]">Reportes y Descargas</h1>
+      <h1 className="text-2xl font-bold text-[#A280B9]">Reportes y Descargas</h1>
 
       {/* Period selector */}
       <div className="bg-white rounded-xl border border-slate-100 p-4 flex flex-wrap items-center gap-3">
@@ -357,14 +357,14 @@ export function ReportsView() {
         <select
           value={mes}
           onChange={e => setMes(Number(e.target.value))}
-          className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#726E97]/30"
+          className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#A280B9]/30"
         >
           {MONTHS.map((m, i) => <option key={m} value={i}>{m}</option>)}
         </select>
         <select
           value={anio}
           onChange={e => setAnio(Number(e.target.value))}
-          className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#726E97]/30"
+          className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#A280B9]/30"
         >
           {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
         </select>
@@ -394,7 +394,7 @@ export function ReportsView() {
                 onClick={r.action}
                 disabled={loading !== null}
                 className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white transition disabled:opacity-50 hover:opacity-90"
-                style={{ background: "#726E97" }}
+                style={{ background: "#A280B9" }}
               >
                 {isLoading
                   ? <><Loader2 size={14} className="animate-spin" />Generando…</>

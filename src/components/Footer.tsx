@@ -9,7 +9,7 @@ export default function Footer() {
     <>
       <footer
         id="footer"
-        style={{ background: 'linear-gradient(135deg, #f8f7fc 0%, #eef2f7 50%, #f0f4f8 100%)' }}
+        style={{ background: '#F8F9FA' }}
       >
         {/* Main section */}
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
@@ -18,7 +18,7 @@ export default function Footer() {
             <div className="space-y-8">
               <div className="flex items-center gap-3">
                 <div>
-                  <span className="text-2xl font-semibold tracking-tight" style={{ color: '#1a1a2e' }}>
+                  <span className="text-2xl font-semibold tracking-tight" style={{ color: '#402B52' }}>
                     Bio<span style={{ color: '#7698B3' }}>Safe</span>
                   </span>
                   <p className="text-xs font-light text-gray-500 mt-0.5">Cochabamba · Bolivia</p>
@@ -47,7 +47,7 @@ export default function Footer() {
               <button
                 onClick={() => setIsModalOpen(true)}
                 className="flex items-center gap-2.5 py-4 px-8 rounded-2xl text-sm font-medium text-white transition-all duration-200 hover:shadow-2xl hover:-translate-y-1 active:translate-y-0"
-                style={{ background: 'linear-gradient(135deg, #726E97, #7698B3)' }}
+                style={{ background: '#A280B9' }}
               >
                 <LogIn className="w-4 h-4" />
                 Entrar a BioSafe

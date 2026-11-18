@@ -2,25 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  font-family: 'Inter', sans-serif;
+:root {
+  --bs-primary: #A280B9;
+  --bs-secondary: #402B52;
+  --bs-tertiary: #7698B3;
+  --bs-text: #553B5E;
+  --bs-surface: #F8F9FA;
+  --bs-link: #7E57C2;
+  --bs-success: #10B981;
+  --bs-warning: #F59E0B;
+  --bs-danger: #EF4444;
 }
 
-html {
-  scroll-behavior: smooth;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  body {
+    background: #FFFFFF;
+    color: var(--bs-text);
+    font-size: 13px;
+    line-height: 18px;
+  }
+  h1, h2, h3, h4 { color: var(--bs-secondary); font-weight: 700; }
+  :focus-visible { outline: 2px solid var(--bs-primary); outline-offset: 2px; }
+  button, a, input, select, textarea { transition: background-color .2s, border-color .2s, color .2s, box-shadow .2s, opacity .2s; }
+}
+
+@layer components {
+  .bs-card { @apply bg-white rounded-2xl border border-[#F8F9FA]; box-shadow: 0 4px 10px rgba(64,43,82,0.05); }
+  .bs-stat { color: var(--bs-secondary); font-size: 26px; font-weight: 700; line-height: 1.1; }
+  .bs-label { color: var(--bs-tertiary); font-size: 12px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; }
+  .bs-pill { font-size: 11px; font-weight: 700; border-radius: 20px; padding: 3px 10px; }
+  .bs-btn { background: var(--bs-primary); color: #fff; font-weight: 700; border-radius: 16px; padding: 12px 20px; }
+  .bs-btn:hover { filter: brightness(.94); }
+  .bs-link { color: var(--bs-link); font-weight: 600; }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
+.animate-fadeIn { animation: fadeIn .4s ease-out; }
 
-.animate-fadeIn {
-  animation: fadeIn 0.6s ease-out;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }

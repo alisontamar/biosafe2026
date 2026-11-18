@@ -10,9 +10,9 @@ type StatCardProps = {
 
 export function StatCard({ icon: Icon, title, value, detail, color }: StatCardProps) {
   const styles = {
-    purple: "bg-[#726E97]/10 text-[#726E97]",
+    purple: "bg-[#A280B9]/10 text-[#A280B9]",
     green: "bg-emerald-50 text-emerald-600",
-    blue: "bg-blue-50 text-blue-500",
+    blue: "bg-[#F3ECF8] text-[#A280B9]",
     red: "bg-red-50 text-red-500",
   };
 
@@ -25,7 +25,7 @@ export function StatCard({ icon: Icon, title, value, detail, color }: StatCardPr
         <div>
           <p className="text-sm text-slate-500 leading-tight mb-2">{title}</p>
           <p className="text-3xl font-bold text-slate-900">{value}</p>
-          <p className={`text-xs mt-1 ${color === "red" ? "text-[#726E97]" : "text-emerald-500"}`}>
+          <p className={`text-xs mt-1 ${color === "red" ? "text-[#A280B9]" : "text-emerald-500"}`}>
             {detail}
           </p>
         </div>

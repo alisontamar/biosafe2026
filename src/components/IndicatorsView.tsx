@@ -41,7 +41,7 @@ function TrendBadge({ val }: { val: number }) {
 }
 
 function CovBar({ cov }: { cov: number }) {
-  const color = cov >= 90 ? "#639922" : cov >= 75 ? "#BA7517" : "#E24B4A";
+  const color = cov >= 90 ? "#639922" : cov >= 75 ? "#BA7517" : "#EF4444";
   return (
     <div className="flex items-center gap-2">
       <div className="flex-1 h-1.5 rounded-full bg-slate-100 min-w-[50px]">
@@ -71,9 +71,9 @@ function resolveAlertStyle(titulo: string, datos: any): { color: string; bg: str
   const title = titulo.toLowerCase();
   const isHigh = nivel.includes("alto") || nivel.includes("critic") || title.includes("alto") || title.includes("riesgo alto") || title.includes("crítico");
   const isMed  = nivel.includes("moderado") || nivel.includes("medio") || nivel.includes("warning") || title.includes("moderado") || title.includes("alerta");
-  if (isHigh) return { color: "#A32D2D", bg: "#FCEBEB", level: "Crítica" };
+  if (isHigh) return { color: "#B91C1C", bg: "#FEF2F2", level: "Crítica" };
   if (isMed)  return { color: "#854F0B", bg: "#FAEEDA", level: "Alerta" };
-  return { color: "#3B6D11", bg: "#EAF3DE", level: "Info" };
+  return { color: "#047857", bg: "#EAF3DE", level: "Info" };
 }
 
 // ── component ─────────────────────────────────────────────────────────────────
@@ -93,9 +93,9 @@ export function IndicatorsView() {
   const [trendData,    setTrendData]    = useState<{ mes: string; pct: number }[]>([]);
   const [vaccineRows,  setVaccineRows]  = useState<VaccineStat[]>([]);
   const [donutData,    setDonutData]    = useState([
-    { name: "Completos",   value: 0, color: "#7F77DD" },
-    { name: "En proceso",  value: 0, color: "#FAC775" },
-    { name: "Abandonados", value: 0, color: "#E24B4A" },
+    { name: "Completos",   value: 0, color: "#A280B9" },
+    { name: "En proceso",  value: 0, color: "#F59E0B" },
+    { name: "Abandonados", value: 0, color: "#EF4444" },
   ]);
   const [dropData,     setDropData]     = useState<{ name: string; n: number }[]>([]);
   const [alertsList,   setAlertsList]   = useState<AlertItem[]>([]);
@@ -249,9 +249,9 @@ export function IndicatorsView() {
       setTotalCompletos(completos);
       setTotalAbandono(abandonados);
       setDonutData([
-        { name: "Completos",   value: completos,   color: "#7F77DD" },
-        { name: "En proceso",  value: enProceso,   color: "#FAC775" },
-        { name: "Abandonados", value: abandonados, color: "#E24B4A" },
+        { name: "Completos",   value: completos,   color: "#A280B9" },
+        { name: "En proceso",  value: enProceso,   color: "#F59E0B" },
+        { name: "Abandonados", value: abandonados, color: "#EF4444" },
       ]);
 
       // ── Dropoff (overdue next-dose per vaccine) ──────────────────────────────
@@ -308,7 +308,7 @@ export function IndicatorsView() {
   if (loading) {
     return (
       <div className="p-10 flex justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#726E97]" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#A280B9]" />
       </div>
     );
   }
@@ -323,11 +323,11 @@ export function IndicatorsView() {
 
       {/* Header */}
       <div className="flex items-center gap-2 text-sm text-slate-500">
-        <Building size={18} className="text-[#534AB7]" />
+        <Building size={18} className="text-[#7E57C2]" />
         <span>Centro de Salud <strong className="text-slate-800">{establecimiento}</strong></span>
         <button
           onClick={loadData}
-          className="ml-auto flex items-center gap-1.5 text-xs text-slate-400 hover:text-[#534AB7] transition"
+          className="ml-auto flex items-center gap-1.5 text-xs text-slate-400 hover:text-[#7E57C2] transition"
         >
           <RefreshCw size={13} /> Actualizar
         </button>
@@ -342,31 +342,31 @@ export function IndicatorsView() {
               label: "Niños registrados",
               value: totalPacientes.toLocaleString(),
               sub:   "Pacientes en sistema",
-              color: "#534AB7",
+              color: "#7E57C2",
             },
             {
               label: "Cobertura promedio",
               value: `${coberturaPromedio}%`,
               sub:   "Meta: 90%",
-              color: "#534AB7",
+              color: "#7E57C2",
             },
             {
               label: "Esquemas completos",
               value: totalCompletos.toLocaleString(),
               sub:   totalPacientes > 0 ? `${Math.round((totalCompletos / totalPacientes) * 100)}% del total` : "—",
-              color: "#3B6D11",
+              color: "#047857",
             },
             {
               label: "Dosis aplicadas",
               value: totalDosis.toLocaleString(),
               sub:   "Total registradas",
-              color: "#534AB7",
+              color: "#7E57C2",
             },
             {
               label: "Abandono",
               value: totalAbandono.toLocaleString(),
               sub:   totalPacientes > 0 ? `${Math.round((totalAbandono / totalPacientes) * 100)}% del total` : "—",
-              color: "#A32D2D",
+              color: "#B91C1C",
             },
           ].map(k => (
             <div key={k.label} className="bg-white rounded-xl border border-slate-100 p-3 sm:p-4">
@@ -384,22 +384,22 @@ export function IndicatorsView() {
         {/* Bar chart months */}
         <div className="bg-white rounded-xl border border-slate-100 p-5">
           <p className="text-sm font-semibold text-slate-800 flex items-center gap-2 mb-4">
-            <CalendarDays size={15} className="text-[#534AB7]" /> Dosis aplicadas por mes
+            <CalendarDays size={15} className="text-[#7E57C2]" /> Dosis aplicadas por mes
           </p>
           {hasCampData ? (
             <>
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart data={campData} barSize={28}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" vertical={false} />
-                  <XAxis dataKey="mes" tick={{ fontSize: 11, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
-                  <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={(v: number | string) => `${v}%`} />
+                  <XAxis dataKey="mes" tick={{ fontSize: 11, fill: "#7698B3" }} axisLine={false} tickLine={false} />
+                  <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: "#7698B3" }} axisLine={false} tickLine={false} tickFormatter={(v: number | string) => `${v}%`} />
                   <Tooltip formatter={(value: any) => [`${value ?? 0}%`, "% de pacientes"]} />
-                  <ReferenceLine y={90} stroke="#E24B4A" strokeDasharray="5 4" strokeWidth={1.5} label={{ value: "Meta 90%", position: "right", fontSize: 10, fill: "#E24B4A" }} />
-                  <Bar dataKey="cov" fill="#AFA9EC" radius={[4, 4, 0, 0]} />
+                  <ReferenceLine y={90} stroke="#EF4444" strokeDasharray="5 4" strokeWidth={1.5} label={{ value: "Meta 90%", position: "right", fontSize: 10, fill: "#EF4444" }} />
+                  <Bar dataKey="cov" fill="#CDB6DC" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
               <div className="flex gap-4 mt-2 text-[11px] text-slate-400">
-                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm inline-block" style={{ background: "#AFA9EC" }} />% Pacientes vacunados</span>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm inline-block" style={{ background: "#CDB6DC" }} />% Pacientes vacunados</span>
                 <span className="flex items-center gap-1"><span className="w-5 inline-block border-t-2 border-dashed border-red-400" />Meta 90%</span>
               </div>
             </>
@@ -413,7 +413,7 @@ export function IndicatorsView() {
         {/* Donut + trend */}
         <div className="bg-white rounded-xl border border-slate-100 p-5 flex flex-col gap-4">
           <p className="text-sm font-semibold text-slate-800 flex items-center gap-2">
-            <CheckCircle2 size={15} className="text-[#534AB7]" /> Estado de esquemas ({totalPacientes} niños)
+            <CheckCircle2 size={15} className="text-[#7E57C2]" /> Estado de esquemas ({totalPacientes} niños)
           </p>
           <div className="flex items-center gap-5">
             {totalDonutValue > 0 ? (
@@ -452,10 +452,10 @@ export function IndicatorsView() {
               <ResponsiveContainer width="100%" height={80}>
                 <LineChart data={trendData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" vertical={false} />
-                  <XAxis dataKey="mes" tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
-                  <YAxis domain={[0, 100]} tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={(v: number | string) => `${v}%`} />
+                  <XAxis dataKey="mes" tick={{ fontSize: 10, fill: "#7698B3" }} axisLine={false} tickLine={false} />
+                  <YAxis domain={[0, 100]} tick={{ fontSize: 10, fill: "#7698B3" }} axisLine={false} tickLine={false} tickFormatter={(v: number | string) => `${v}%`} />
                   <Tooltip formatter={(value: any) => [`${value ?? 0}%`, "Cobertura"]} />
-                  <Line type="monotone" dataKey="pct" stroke="#7F77DD" strokeWidth={2} dot={{ r: 3, fill: "#7F77DD" }} />
+                  <Line type="monotone" dataKey="pct" stroke="#A280B9" strokeWidth={2} dot={{ r: 3, fill: "#A280B9" }} />
                 </LineChart>
               </ResponsiveContainer>
             ) : (
@@ -470,24 +470,24 @@ export function IndicatorsView() {
       {/* Cobertura por tipo de vacuna */}
       <div className="bg-white rounded-xl border border-slate-100 p-5">
         <p className="text-sm font-semibold text-slate-800 flex items-center gap-2 mb-4">
-          <Syringe size={15} className="text-[#534AB7]" /> Cobertura por tipo de vacuna
+          <Syringe size={15} className="text-[#7E57C2]" /> Cobertura por tipo de vacuna
         </p>
         {hasVaccineData ? (
           <>
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={vaccineRows} barSize={18} barGap={4}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" vertical={false} />
-                <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
-                <YAxis yAxisId="cov" orientation="left"  domain={[0, 100]} tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={(v: number | string) => `${v}%`} />
-                <YAxis yAxisId="n"   orientation="right" tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
+                <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#7698B3" }} axisLine={false} tickLine={false} />
+                <YAxis yAxisId="cov" orientation="left"  domain={[0, 100]} tick={{ fontSize: 10, fill: "#7698B3" }} axisLine={false} tickLine={false} tickFormatter={(v: number | string) => `${v}%`} />
+                <YAxis yAxisId="n"   orientation="right" tick={{ fontSize: 10, fill: "#7698B3" }} axisLine={false} tickLine={false} />
                 <Tooltip />
-                <Bar yAxisId="cov" dataKey="cov"  name="Cobertura"        fill="#7F77DD" radius={[3,3,0,0]} />
-                <Bar yAxisId="n"   dataKey="appl" name="Pacientes únicos" fill="#5DCAA5" radius={[3,3,0,0]} />
+                <Bar yAxisId="cov" dataKey="cov"  name="Cobertura"        fill="#A280B9" radius={[3,3,0,0]} />
+                <Bar yAxisId="n"   dataKey="appl" name="Pacientes únicos" fill="#10B981" radius={[3,3,0,0]} />
               </BarChart>
             </ResponsiveContainer>
             <div className="flex gap-4 mt-2 text-[11px] text-slate-400">
-              <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm inline-block bg-[#7F77DD]" />Cobertura %</span>
-              <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm inline-block bg-[#5DCAA5]" />Pacientes únicos</span>
+              <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm inline-block bg-[#A280B9]" />Cobertura %</span>
+              <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-sm inline-block bg-[#10B981]" />Pacientes únicos</span>
             </div>
           </>
         ) : (
@@ -500,14 +500,14 @@ export function IndicatorsView() {
       {/* Tabla detalle */}
       <div className="bg-white rounded-xl border border-slate-100 p-5">
         <p className="text-sm font-semibold text-slate-800 flex items-center gap-2 mb-4">
-          <Table size={15} className="text-[#534AB7]" /> Detalle por vacuna
+          <Table size={15} className="text-[#7E57C2]" /> Detalle por vacuna
         </p>
         <div className="flex flex-wrap gap-2 mb-4">
           {TABS.map(t => (
             <button
               key={t.key}
               onClick={() => setActiveTab(t.key)}
-              className={`text-xs px-3 py-1 rounded-full border transition ${activeTab === t.key ? "bg-[#EEEDFE] text-[#3C3489] border-[#AFA9EC]" : "border-slate-200 text-slate-500 hover:bg-slate-50"}`}
+              className={`text-xs px-3 py-1 rounded-full border transition ${activeTab === t.key ? "bg-[#F3ECF8] text-[#402B52] border-[#CDB6DC]" : "border-slate-200 text-slate-500 hover:bg-slate-50"}`}
             >
               {t.label}
             </button>
@@ -581,7 +581,7 @@ export function IndicatorsView() {
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={dropData} layout="vertical" barSize={14}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" horizontal={false} />
-                <XAxis type="number" tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
+                <XAxis type="number" tick={{ fontSize: 10, fill: "#7698B3" }} axisLine={false} tickLine={false} />
                 <YAxis type="category" dataKey="name" width={90} tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} />
                 <Tooltip />
                 <Bar dataKey="n" name="Dosis vencidas" fill="#F09595" radius={[0, 3, 3, 0]} />

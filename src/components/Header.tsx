@@ -108,13 +108,13 @@ export default function Header() {
           left: 0;
           width: 0;
           height: 2px;
-          background: linear-gradient(90deg, #726E97, #7698B3);
+          background: #A280B9;
           border-radius: 999px;
           transition: width 0.28s cubic-bezier(0.4,0,0.2,1);
         }
 
         .nav-link-item:hover {
-          color: #726E97;
+          color: #A280B9;
         }
 
         .nav-link-item:hover::after,
@@ -123,7 +123,7 @@ export default function Header() {
         }
 
         .nav-link-item.active {
-          color: #726E97;
+          color: #A280B9;
         }
 
         .mobile-drawer {
@@ -135,7 +135,7 @@ export default function Header() {
           align-items: center;
           justify-content: space-between;
           padding: 0.9rem 0;
-          color: #374151;
+          color: #553B5E;
           font-size: 0.9rem;
           font-weight: 500;
           text-decoration: none;
@@ -148,7 +148,7 @@ export default function Header() {
         }
 
         .mobile-link:hover {
-          color: #726E97;
+          color: #A280B9;
           padding-left: 4px;
         }
 
@@ -162,7 +162,7 @@ export default function Header() {
           font-size: 0.85rem;
           font-weight: 600;
           color: #fff;
-          background: linear-gradient(135deg, #726E97, #7698B3);
+          background: #A280B9;
           text-decoration: none;
           transition: transform 0.18s ease, box-shadow 0.18s ease;
           box-shadow: 0 8px 25px rgba(114, 110, 151, 0.26);
@@ -201,7 +201,7 @@ export default function Header() {
 
             {/* Logo */}
             <a href="#inicio" className="logo-word logo-animate">
-              <span style={{ color: '#726E97' }}>Bio</span>
+              <span style={{ color: '#A280B9' }}>Bio</span>
               <span style={{ color: '#7698B3' }}>Safe</span>
             </a>
 

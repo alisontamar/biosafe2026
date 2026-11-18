@@ -61,7 +61,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       {view === 'entry' && (
         <div className="relative w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl">
           {/* Header sólido */}
-          <div className="px-8 pt-8 pb-10 relative" style={{ background: '#726E97' }}>
+          <div className="px-8 pt-8 pb-10 relative" style={{ background: '#A280B9' }}>
             <button
               onClick={closeModal}
               className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
@@ -84,7 +84,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             {/* Tarjeta app móvil */}
             <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4 mb-4">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: '#726E97' }}>
+                <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: '#A280B9' }}>
                   <Smartphone className="w-4 h-4 text-white" />
                 </div>
                 <div>
@@ -94,7 +94,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               </div>
               <button
                 className="w-full flex items-center justify-between py-2.5 px-4 rounded-xl text-sm font-medium text-white transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5"
-                style={{ background: '#726E97' }}
+                style={{ background: '#A280B9' }}
               >
                 <span className="flex items-center gap-2">
                   <Download className="w-4 h-4" />
@@ -108,18 +108,18 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             {/* Acceso profesional */}
             <button
               onClick={() => setView('login')}
-              className="w-full flex items-center justify-between py-3 px-4 rounded-2xl border-2 border-dashed border-gray-200 hover:border-[#726E97]/40 hover:bg-[#726E97]/5 transition-all duration-200 group"
+              className="w-full flex items-center justify-between py-3 px-4 rounded-2xl border-2 border-dashed border-gray-200 hover:border-[#A280B9]/40 hover:bg-[#A280B9]/5 transition-all duration-200 group"
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-[#726E97]/10 flex items-center justify-center group-hover:bg-[#726E97]/20 transition-colors">
-                  <Activity className="w-4 h-4 text-[#726E97]" />
+                <div className="w-8 h-8 rounded-xl bg-[#A280B9]/10 flex items-center justify-center group-hover:bg-[#A280B9]/20 transition-colors">
+                  <Activity className="w-4 h-4 text-[#A280B9]" />
                 </div>
                 <div className="text-left">
                   <p className="text-xs font-semibold text-gray-800">Profesional de salud</p>
                   <p className="text-xs text-gray-400 font-light">Centro médico / establecimiento</p>
                 </div>
               </div>
-              <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-[#726E97] transition-colors" />
+              <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-[#A280B9] transition-colors" />
             </button>
           </div>
         </div>
@@ -128,7 +128,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       {view === 'login' && (
         <div className="relative w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl">
           {/* Barra de acento sólida */}
-          <div className="h-1.5 w-full" style={{ background: '#726E97' }} />
+          <div className="h-1.5 w-full" style={{ background: '#A280B9' }} />
 
           <div className="bg-white px-8 py-7">
             {/* Volver + cerrar */}
@@ -147,11 +147,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
             {/* Título */}
             <div className="flex items-center gap-3 mb-7">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: '#726E97' }}>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: '#A280B9' }}>
                 <Shield className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-base font-bold" style={{ color: '#1a1a2e' }}>Acceso Profesional</h3>
+                <h3 className="text-base font-bold" style={{ color: '#402B52' }}>Acceso Profesional</h3>
                 <p className="text-xs text-gray-400 font-light">Ingresa tus credenciales de BioSafe</p>
               </div>
             </div>
@@ -174,9 +174,9 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   placeholder="tucorreo@ejemplo.com"
                   disabled={loading}
                   className="w-full px-4 py-3 rounded-xl text-sm placeholder-gray-300 border outline-none transition-all duration-200 disabled:opacity-50"
-                  style={{ background: '#fafafa', borderColor: '#e5e7eb', color: '#1a1a2e' }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = '#726E97'; e.currentTarget.style.background = 'white'; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.background = '#fafafa'; }}
+                  style={{ background: '#F8F9FA', borderColor: '#E6DEEC', color: '#402B52' }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = '#A280B9'; e.currentTarget.style.background = 'white'; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = '#E6DEEC'; e.currentTarget.style.background = '#F8F9FA'; }}
                 />
               </div>
 
@@ -192,9 +192,9 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                     placeholder="••••••••"
                     disabled={loading}
                     className="w-full px-4 py-3 pr-11 rounded-xl text-sm placeholder-gray-300 border outline-none transition-all duration-200 disabled:opacity-50"
-                    style={{ background: '#fafafa', borderColor: '#e5e7eb', color: '#1a1a2e' }}
-                    onFocus={(e) => { e.currentTarget.style.borderColor = '#726E97'; e.currentTarget.style.background = 'white'; }}
-                    onBlur={(e) => { e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.background = '#fafafa'; }}
+                    style={{ background: '#F8F9FA', borderColor: '#E6DEEC', color: '#402B52' }}
+                    onFocus={(e) => { e.currentTarget.style.borderColor = '#A280B9'; e.currentTarget.style.background = 'white'; }}
+                    onBlur={(e) => { e.currentTarget.style.borderColor = '#E6DEEC'; e.currentTarget.style.background = '#F8F9FA'; }}
                   />
                   <button
                     type="button"
@@ -212,7 +212,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 onClick={handleSubmit}
                 disabled={loading}
                 className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5 mt-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
-                style={{ background: '#726E97' }}
+                style={{ background: '#A280B9' }}
               >
                 {loading ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

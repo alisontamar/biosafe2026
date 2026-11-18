@@ -3,7 +3,7 @@ import { Users, Stethoscope, Building2, ArrowRight, Smartphone } from 'lucide-re
 const audiences = [
   {
     icon: Users,
-    accent: '#726E97',
+    accent: '#A280B9',
     bg: 'rgba(114,110,151,0.07)',
     label: 'Para Padres y Tutores',
     tagline: 'Toda la familia, en un solo lugar',
@@ -27,7 +27,7 @@ const audiences = [
   },
   {
     icon: Building2,
-    accent: '#726E97',
+    accent: '#A280B9',
     bg: 'rgba(114,110,151,0.07)',
     label: 'Para Establecimientos',
     tagline: 'Gestión centralizada',
@@ -41,7 +41,7 @@ const audiences = [
 
 export default function Network() {
   return (
-    <section id="red" style={{ padding: '5rem 1.5rem', background: '#f8f7fc' }}>
+    <section id="red" style={{ padding: '5rem 1.5rem', background: '#F8F9FA' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
         {/* Header */}
@@ -63,17 +63,17 @@ export default function Network() {
             style={{
               fontSize: 'clamp(1.9rem, 4.5vw, 3rem)',
               fontWeight: 700,
-              color: '#1a1a2e',
+              color: '#402B52',
               lineHeight: 1.15,
               margin: '0 0 1rem',
             }}
           >
             BioSafe para{' '}
-            <span style={{ color: '#726E97' }}>todos</span>
+            <span style={{ color: '#A280B9' }}>todos</span>
           </h2>
           <p
             style={{
-              color: '#9ca3af',
+              color: '#7698B3',
               fontWeight: 300,
               fontSize: '0.95rem',
               maxWidth: 460,
@@ -144,7 +144,7 @@ export default function Network() {
                   <p style={{ fontSize: '0.7rem', fontWeight: 500, color: accent, textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>
                     {label}
                   </p>
-                  <p style={{ fontSize: '0.95rem', fontWeight: 700, color: '#1a1a2e', margin: 0, marginTop: 2 }}>
+                  <p style={{ fontSize: '0.95rem', fontWeight: 700, color: '#402B52', margin: 0, marginTop: 2 }}>
                     {tagline}
                   </p>
                 </div>
@@ -152,7 +152,7 @@ export default function Network() {
 
               {/* Content */}
               <div style={{ padding: '1.5rem 1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <p style={{ fontSize: '0.875rem', fontWeight: 300, color: '#6b7280', lineHeight: 1.7, margin: '0 0 1.25rem' }}>
+                <p style={{ fontSize: '0.875rem', fontWeight: 300, color: '#7698B3', lineHeight: 1.7, margin: '0 0 1.25rem' }}>
                   {description}
                 </p>
 
@@ -160,7 +160,7 @@ export default function Network() {
                   {features.map(f => (
                     <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                       <div style={{ width: 6, height: 6, borderRadius: '50%', background: accent, flexShrink: 0 }} />
-                      <span style={{ fontSize: '0.85rem', fontWeight: 400, color: '#374151' }}>{f}</span>
+                      <span style={{ fontSize: '0.85rem', fontWeight: 400, color: '#553B5E' }}>{f}</span>
                     </li>
                   ))}
                 </ul>
@@ -194,7 +194,7 @@ export default function Network() {
           style={{
             borderRadius: 24,
             padding: '2.5rem',
-            background: 'linear-gradient(135deg, #726E97 0%, #5d5a7a 50%, #7698B3 100%)',
+            background: '#A280B9',
             display: 'flex',
             flexWrap: 'wrap',
             alignItems: 'center',

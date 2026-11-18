@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { UserRound, Baby, ShieldCheck, AlertTriangle, QrCode, Activity } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import { AlertDetailModal } from "./AlertsView";
 
 // ── StatCard ──────────────────────────────────────────────────────────────────
 function StatCard({ icon: Icon, title, value, detail, color }: {
   icon: React.ElementType; title: string; value: string | number; detail: string; color: string;
 }) {
   const colors: Record<string, string> = {
-    purple: "text-[#726E97] bg-purple-50",
+    purple: "text-[#A280B9] bg-[#F3ECF8]",
     green:  "text-emerald-500 bg-emerald-50",
-    blue:   "text-blue-500 bg-blue-50",
+    blue:   "text-[#A280B9] bg-[#F3ECF8]",
     red:    "text-red-500 bg-red-50",
   };
   const detailColor = detail.startsWith("+") ? "text-emerald-500" : "text-slate-400";
@@ -31,7 +32,7 @@ function QuickVaccinationCard({ onNavigate }: { onNavigate?: (tab: string) => vo
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col gap-4">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center text-[#726E97]">
+        <div className="w-10 h-10 rounded-lg bg-[#F3ECF8] flex items-center justify-center text-[#A280B9]">
           <QrCode size={20} />
         </div>
         <div>
@@ -45,7 +46,7 @@ function QuickVaccinationCard({ onNavigate }: { onNavigate?: (tab: string) => vo
       <button
         onClick={() => onNavigate?.("vacunacion")}
         className="w-full py-3 rounded-lg text-white font-semibold text-sm hover:opacity-90 transition"
-        style={{ background: "#726E97" }}
+        style={{ background: "#A280B9" }}
       >
         Ir a Vacunación
       </button>
@@ -60,6 +61,7 @@ export function HomeView({ onNavigate }: { onNavigate?: (tab: string) => void })
   const [stats, setStats] = useState({ tutores: 0, ninos: 0, cobertura: "0%", alertas: 0 });
   const [pendientes, setPendientes] = useState<any[]>([]);
   const [alertaReciente, setAlertaReciente] = useState<any>(null);
+  const [detalleAbierto, setDetalleAbierto] = useState(false);
 
   useEffect(() => {
     cargarDatosDashboard();
@@ -156,12 +158,12 @@ export function HomeView({ onNavigate }: { onNavigate?: (tab: string) => void })
   };
 
   if (loading) {
-    return <div className="p-10 flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#726E97]"></div></div>;
+    return <div className="p-10 flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#A280B9]"></div></div>;
   }
 
   return (
     <div className="space-y-6 p-4 sm:p-6 bg-slate-50 min-h-screen">
-      <h1 className="text-xl font-bold text-[#726E97]">Resumen general</h1>
+      <h1 className="text-xl font-bold text-[#A280B9]">Resumen general</h1>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5">
         <StatCard icon={UserRound}    title="Padres de familia registrados" value={stats.tutores} detail="Registros activos"       color="purple" />
@@ -178,12 +180,12 @@ export function HomeView({ onNavigate }: { onNavigate?: (tab: string) => void })
               <div className="relative w-28 h-28">
                 <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                   <circle cx="50" cy="50" r="40" fill="none" stroke="#e2e8f0" strokeWidth="12" />
-                  <circle cx="50" cy="50" r="40" fill="none" stroke="#726E97" strokeWidth="12"
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#A280B9" strokeWidth="12"
                     strokeDasharray={`${2 * Math.PI * 40 * 0.824} ${2 * Math.PI * 40 * 0.176}`} strokeLinecap="round" />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                   <p className="text-[9px] text-slate-400 leading-none">Cobertura</p>
-                  <p className="text-xl font-bold text-[#726E97] leading-tight">{stats.cobertura}</p>
+                  <p className="text-xl font-bold text-[#A280B9] leading-tight">{stats.cobertura}</p>
                   <p className="text-[9px] text-slate-400 leading-none">Meta: 90%</p>
                 </div>
               </div>
@@ -232,16 +234,9 @@ export function HomeView({ onNavigate }: { onNavigate?: (tab: string) => void })
           {alertaReciente && (
             <>
               <svg viewBox="0 0 200 60" className="w-full" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="spark" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#f87171" stopOpacity="0.3" />
-                    <stop offset="100%" stopColor="#f87171" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <path d="M0,45 L25,38 L50,42 L75,30 L100,35 L125,20 L150,28 L175,15 L200,22" fill="none" stroke="#f87171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M0,45 L25,38 L50,42 L75,30 L100,35 L125,20 L150,28 L175,15 L200,22 L200,60 L0,60 Z" fill="url(#spark)" />
+                <path d="M0,45 L25,38 L50,42 L75,30 L100,35 L125,20 L150,28 L175,15 L200,22" fill="none" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <button className="w-full py-3 rounded-lg bg-[#726E97] text-white font-semibold text-sm hover:opacity-90 transition">
+              <button onClick={() => setDetalleAbierto(true)} className="w-full py-3 rounded-lg bg-[#A280B9] text-white font-semibold text-sm hover:opacity-90 transition">
                 Ver detalle de riesgo
               </button>
             </>
@@ -254,11 +249,11 @@ export function HomeView({ onNavigate }: { onNavigate?: (tab: string) => void })
         
         <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
            <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center text-[#726E97]">
+            <div className="w-10 h-10 rounded-lg bg-[#F3ECF8] flex items-center justify-center text-[#A280B9]">
               <Activity size={20} />
             </div>
             <div>
-              <h2 className="font-bold text-slate-900 text-sm">Insights de riesgo <span className="text-[#726E97]">(IA)</span></h2>
+              <h2 className="font-bold text-slate-900 text-sm">Insights de riesgo <span className="text-[#A280B9]">(IA)</span></h2>
               <p className="text-xs text-slate-400">Análisis epidemiológico en tiempo real</p>
             </div>
           </div>
@@ -267,6 +262,13 @@ export function HomeView({ onNavigate }: { onNavigate?: (tab: string) => void })
           </p>
         </div>
       </div>
+      {detalleAbierto && alertaReciente && (
+        <AlertDetailModal
+          alerta={alertaReciente}
+          onClose={() => setDetalleAbierto(false)}
+          onVerTodas={() => { setDetalleAbierto(false); onNavigate?.("alertas"); }}
+        />
+      )}
     </div>
   );
 }

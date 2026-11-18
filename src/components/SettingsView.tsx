@@ -171,7 +171,7 @@ export default function SettingsView() {
   if (loading) {
     return (
       <div className="p-10 flex justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#726E97]" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#A280B9]" />
       </div>
     );
   }
@@ -181,7 +181,7 @@ export default function SettingsView() {
 
   return (
     <div className="space-y-6 pb-10">
-      <h1 className="text-2xl font-bold text-[#726E97]">Configuración</h1>
+      <h1 className="text-2xl font-bold text-[#A280B9]">Configuración</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -191,7 +191,7 @@ export default function SettingsView() {
           {/* Mi perfil */}
           <section className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-[#726E97]/10 rounded-lg text-[#726E97]">
+              <div className="p-2 bg-[#A280B9]/10 rounded-lg text-[#A280B9]">
                 <User className="w-5 h-5" />
               </div>
               <h2 className="font-bold text-slate-800">Mi Perfil</h2>
@@ -309,7 +309,7 @@ export default function SettingsView() {
                         <td className="px-4 py-3 font-medium text-slate-800">{est.nombre_establecimiento}</td>
                         <td className="px-4 py-3">{est.ciudad_municipio}</td>
                         <td className="px-4 py-3">
-                          <span className={`px-2 py-1 text-[10px] font-bold rounded-full ${est.tipo === "Farmacia" ? "bg-blue-100 text-blue-700" : "bg-emerald-100 text-emerald-700"}`}>
+                          <span className={`px-2 py-1 text-[10px] font-bold rounded-full ${est.tipo === "Farmacia" ? "bg-[#F3ECF8] text-[#402B52]" : "bg-emerald-100 text-emerald-700"}`}>
                             {est.tipo}
                           </span>
                         </td>
@@ -341,22 +341,22 @@ export default function SettingsView() {
             <section className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
+                  <div className="p-2 bg-[#F3ECF8] rounded-lg text-[#A280B9]">
                     <Users className="w-5 h-5" />
                   </div>
                   <h2 className="font-bold text-slate-800">Gestión de Personal</h2>
                 </div>
                 <button
                   onClick={() => setShowForm(!showForm)}
-                  className="bg-blue-500 text-white px-3 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold hover:bg-blue-600 transition"
+                  className="bg-[#A280B9] text-white px-3 py-1.5 rounded-lg flex items-center gap-1 text-xs font-bold hover:bg-[#A280B9] transition"
                 >
                   <Plus className="w-3 h-3" /> Agregar
                 </button>
               </div>
 
               {showForm && (
-                <div className="mb-6 p-4 border border-blue-100 bg-blue-50 rounded-lg space-y-4">
-                  <h3 className="text-sm font-bold text-blue-800">Crear acceso para personal médico</h3>
+                <div className="mb-6 p-4 border border-[#E6DEEC] bg-[#F3ECF8] rounded-lg space-y-4">
+                  <h3 className="text-sm font-bold text-[#402B52]">Crear acceso para personal médico</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <input type="text" placeholder="Nombre completo" value={newPersonal.nombre}
                       onChange={e => setNewPersonal({ ...newPersonal, nombre: e.target.value })}
@@ -381,7 +381,7 @@ export default function SettingsView() {
                       Cancelar
                     </button>
                     <button onClick={handleCrearPersonal}
-                      className="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded shadow-sm">
+                      className="px-4 py-2 text-xs font-bold text-white bg-[#A280B9] hover:bg-[#402B52] rounded shadow-sm">
                       Crear Cuenta
                     </button>
                   </div>
@@ -445,7 +445,7 @@ export default function SettingsView() {
           {/* Notificaciones IA */}
           <section className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-[#726E97]/10 rounded-lg text-[#726E97]">
+              <div className="p-2 bg-[#A280B9]/10 rounded-lg text-[#A280B9]">
                 <BellRing className="w-5 h-5" />
               </div>
               <h2 className="font-bold text-slate-800 text-sm">Notificaciones IA</h2>
@@ -461,7 +461,7 @@ export default function SettingsView() {
                     <p className="text-sm font-semibold text-slate-700">{item.label}</p>
                     <p className="text-[10px] text-slate-400">{item.desc}</p>
                   </div>
-                  <div className="w-10 h-5 bg-[#726E97] rounded-full relative cursor-pointer shadow-inner">
+                  <div className="w-10 h-5 bg-[#A280B9] rounded-full relative cursor-pointer shadow-inner">
                     <div className="absolute right-1 top-1 w-3 h-3 bg-white rounded-full shadow-sm" />
                   </div>
                 </div>
@@ -472,7 +472,7 @@ export default function SettingsView() {
           {/* Seguridad */}
           <section className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-[#726E97]/10 rounded-lg text-[#726E97]">
+              <div className="p-2 bg-[#A280B9]/10 rounded-lg text-[#A280B9]">
                 <Shield className="w-5 h-5" />
               </div>
               <h2 className="font-bold text-slate-800 text-sm">Seguridad</h2>
@@ -483,9 +483,7 @@ export default function SettingsView() {
           </section>
 
           {/* Tarjeta BioSafe */}
-          <div className="p-5 rounded-xl overflow-hidden relative" style={{ background: "#726E97" }}>
-            <div className="absolute inset-0 opacity-10"
-              style={{ backgroundImage: "radial-gradient(circle at 80% 20%, #fff 0%, transparent 60%)" }} />
+          <div className="p-5 rounded-xl overflow-hidden relative" style={{ background: "#A280B9" }}>
             <div className="relative">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">

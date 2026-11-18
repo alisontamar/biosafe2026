@@ -3,7 +3,7 @@ import { QrCode, Syringe, Bell, BookOpen } from 'lucide-react';
 const features = [
   {
     icon: QrCode,
-    accent: '#726E97',
+    accent: '#A280B9',
     bg: 'rgba(114,110,151,0.08)',
     title: 'Carnet QR digital',
     description:
@@ -21,7 +21,7 @@ const features = [
   },
   {
     icon: Bell,
-    accent: '#726E97',
+    accent: '#A280B9',
     bg: 'rgba(114,110,151,0.08)',
     title: 'Alertas y recordatorios',
     description:
@@ -41,7 +41,7 @@ const features = [
 
 export default function HowItWorks() {
   return (
-    <section id="que-es" style={{ padding: '5rem 1.5rem', background: '#fafafa' }}>
+    <section id="que-es" style={{ padding: '5rem 1.5rem', background: '#F8F9FA' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
         {/* Header */}
@@ -63,17 +63,17 @@ export default function HowItWorks() {
             style={{
               fontSize: 'clamp(1.9rem, 4.5vw, 3rem)',
               fontWeight: 700,
-              color: '#1a1a2e',
+              color: '#402B52',
               lineHeight: 1.15,
               margin: '0 0 1rem',
             }}
           >
             ¿Qué es{' '}
-            <span style={{ color: '#726E97' }}>BioSafe</span>?
+            <span style={{ color: '#A280B9' }}>BioSafe</span>?
           </h2>
           <p
             style={{
-              color: '#9ca3af',
+              color: '#7698B3',
               fontWeight: 300,
               fontSize: '0.95rem',
               maxWidth: 500,
@@ -140,7 +140,7 @@ export default function HowItWorks() {
                 style={{
                   fontSize: '1.05rem',
                   fontWeight: 700,
-                  color: '#1a1a2e',
+                  color: '#402B52',
                   margin: '0 0 0.65rem',
                   lineHeight: 1.35,
                 }}
@@ -152,7 +152,7 @@ export default function HowItWorks() {
                 style={{
                   fontSize: '0.875rem',
                   fontWeight: 300,
-                  color: '#6b7280',
+                  color: '#7698B3',
                   lineHeight: 1.75,
                   margin: '0 0 1.25rem',
                 }}
@@ -189,7 +189,7 @@ export default function HowItWorks() {
                   right: '1.75rem',
                   height: 2,
                   borderRadius: 999,
-                  background: `linear-gradient(90deg, ${accent}, transparent)`,
+                  background: `${accent}`,
                   opacity: 0.35,
                 }}
               />

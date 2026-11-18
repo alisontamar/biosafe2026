@@ -182,14 +182,14 @@ export default function PatientsView() {
     <div className="space-y-6 pb-10">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#726E97]">Pacientes</h1>
+          <h1 className="text-2xl font-bold text-[#A280B9]">Pacientes</h1>
           {userRole !== "SuperAdmin" && (
             <p className="text-xs text-slate-400 mt-0.5">Mostrando pacientes de tu establecimiento</p>
           )}
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-[#726E97] text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#5f5a82] transition w-full sm:w-auto shadow-sm"
+          className="bg-[#A280B9] text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#553B5E] transition w-full sm:w-auto shadow-sm"
         >
           <UserPlus className="w-4 h-4" /> Alta de Paciente
         </button>
@@ -204,7 +204,7 @@ export default function PatientsView() {
               placeholder="Buscar por nombre o correo..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#726E97]/20"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#A280B9]/20"
             />
           </div>
         </div>
@@ -213,7 +213,7 @@ export default function PatientsView() {
         <div className="sm:hidden divide-y divide-slate-100">
           {loading ? (
             <div className="p-8 text-center text-slate-400">
-              <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-[#726E97]" />
+              <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-[#A280B9]" />
               Cargando...
             </div>
           ) : filteredPatients.length === 0 ? (
@@ -222,7 +222,7 @@ export default function PatientsView() {
             const enMora = overdueSet.has(p.id_paciente);
             return (
               <div key={p.id_paciente} className="p-4 flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0 ${p.sexo === "F" ? "bg-pink-50 text-pink-500" : "bg-blue-50 text-blue-500"}`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0 ${p.sexo === "F" ? "bg-[#F3ECF8] text-[#A280B9]" : "bg-[#F3ECF8] text-[#A280B9]"}`}>
                   {p.nombre_completo.charAt(0)}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -246,7 +246,7 @@ export default function PatientsView() {
                 </div>
                 <button
                   onClick={() => verHistorial(p)}
-                  className="p-2 hover:bg-[#EEEDFE] rounded-lg transition text-slate-400 hover:text-[#726E97] shrink-0"
+                  className="p-2 hover:bg-[#F3ECF8] rounded-lg transition text-slate-400 hover:text-[#A280B9] shrink-0"
                 >
                   <Eye className="w-4 h-4" />
                 </button>
@@ -271,7 +271,7 @@ export default function PatientsView() {
               {loading ? (
                 <tr>
                   <td colSpan={5} className="p-8 text-center text-slate-400">
-                    <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-[#726E97]" />
+                    <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-[#A280B9]" />
                     Cargando...
                   </td>
                 </tr>
@@ -286,13 +286,13 @@ export default function PatientsView() {
                     <tr key={p.id_paciente} className="hover:bg-slate-50 transition">
                       <td className="p-4 font-medium text-slate-800">
                         <div className="flex items-center gap-2">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${p.sexo === "F" ? "bg-pink-50 text-pink-500" : "bg-blue-50 text-blue-500"}`}>
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${p.sexo === "F" ? "bg-[#F3ECF8] text-[#A280B9]" : "bg-[#F3ECF8] text-[#A280B9]"}`}>
                             {p.nombre_completo.charAt(0)}
                           </div>
                           <div className="flex flex-col min-w-0">
                             <span className="truncate">{p.nombre_completo}</span>
                             {p.es_embarazada && (
-                              <span className="text-[9px] text-pink-500 font-bold uppercase tracking-wider">Embarazada</span>
+                              <span className="text-[9px] text-[#A280B9] font-bold uppercase tracking-wider">Embarazada</span>
                             )}
                           </div>
                         </div>
@@ -322,7 +322,7 @@ export default function PatientsView() {
                       <td className="p-4 text-right">
                         <button
                           onClick={() => verHistorial(p)}
-                          className="p-1.5 hover:bg-[#EEEDFE] rounded-lg transition text-slate-400 hover:text-[#726E97]"
+                          className="p-1.5 hover:bg-[#F3ECF8] rounded-lg transition text-slate-400 hover:text-[#A280B9]"
                           title="Ver historial"
                         >
                           <Eye className="w-4 h-4" />
@@ -349,7 +349,7 @@ export default function PatientsView() {
             <div className="p-5 border-b border-slate-100 flex items-start justify-between shrink-0">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${historialPaciente.sexo === "F" ? "bg-pink-50 text-pink-500" : "bg-blue-50 text-blue-500"}`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${historialPaciente.sexo === "F" ? "bg-[#F3ECF8] text-[#A280B9]" : "bg-[#F3ECF8] text-[#A280B9]"}`}>
                     {historialPaciente.nombre_completo.charAt(0)}
                   </div>
                   <p className="font-bold text-slate-800 text-sm">{historialPaciente.nombre_completo}</p>
@@ -369,7 +369,7 @@ export default function PatientsView() {
             {/* Subheader */}
             <div className="px-5 py-3 bg-slate-50 border-b border-slate-100 shrink-0">
               <p className="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
-                <Syringe className="w-3.5 h-3.5 text-[#726E97]" />
+                <Syringe className="w-3.5 h-3.5 text-[#A280B9]" />
                 Historial de vacunación
               </p>
             </div>
@@ -378,7 +378,7 @@ export default function PatientsView() {
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {loadingHistorial ? (
                 <div className="flex justify-center py-10">
-                  <Loader2 className="w-6 h-6 animate-spin text-[#726E97]" />
+                  <Loader2 className="w-6 h-6 animate-spin text-[#A280B9]" />
                 </div>
               ) : historialDosis.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -437,7 +437,7 @@ export default function PatientsView() {
             {!loadingHistorial && historialDosis.length > 0 && (
               <div className="p-4 border-t border-slate-100 shrink-0 bg-slate-50">
                 <p className="text-xs text-slate-500 text-center">
-                  <span className="font-bold text-[#726E97]">{historialDosis.length}</span> dosis registradas en total
+                  <span className="font-bold text-[#A280B9]">{historialDosis.length}</span> dosis registradas en total
                 </p>
               </div>
             )}
@@ -456,7 +456,7 @@ export default function PatientsView() {
             <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
               <div>
                 <h2 className="font-bold text-slate-800 flex items-center gap-2">
-                  <UserPlus className="w-4 h-4 text-[#726E97]" /> Alta de Nuevo Paciente
+                  <UserPlus className="w-4 h-4 text-[#A280B9]" /> Alta de Nuevo Paciente
                 </h2>
                 <p className="text-[10px] text-slate-500 mt-1">Se creará su expediente clínico y su acceso a la app móvil.</p>
               </div>
@@ -473,32 +473,32 @@ export default function PatientsView() {
                     type="text" required placeholder="Nombre Completo"
                     value={newPatient.nombre_completo}
                     onChange={e => setNewPatient({ ...newPatient, nombre_completo: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#726E97]/20 focus:border-[#726E97] transition"
+                    className="w-full px-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#A280B9]/20 focus:border-[#A280B9] transition"
                   />
                   <div className="grid grid-cols-2 gap-3">
                     <input
                       type="date" required max={new Date().toISOString().split("T")[0]}
                       value={newPatient.fecha_nacimiento}
                       onChange={e => setNewPatient({ ...newPatient, fecha_nacimiento: e.target.value })}
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#726E97]/20 transition"
+                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#A280B9]/20 transition"
                     />
                     <select
                       value={newPatient.sexo}
                       onChange={e => setNewPatient({ ...newPatient, sexo: e.target.value, embarazada: false })}
-                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#726E97]/20 transition bg-white"
+                      className="w-full px-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#A280B9]/20 transition bg-white"
                     >
                       <option value="M">Masculino</option>
                       <option value="F">Femenino</option>
                     </select>
                   </div>
                   {newPatient.sexo === "F" && (
-                    <label className="flex items-center gap-2 cursor-pointer bg-pink-50 border border-pink-100 p-3 rounded-lg w-fit">
+                    <label className="flex items-center gap-2 cursor-pointer bg-[#F3ECF8] border border-[#E6DEEC] p-3 rounded-lg w-fit">
                       <input
                         type="checkbox" checked={newPatient.embarazada}
                         onChange={e => setNewPatient({ ...newPatient, embarazada: e.target.checked })}
-                        className="w-4 h-4 text-pink-500 rounded"
+                        className="w-4 h-4 text-[#A280B9] rounded"
                       />
-                      <span className="text-xs font-semibold text-pink-700">Paciente en estado de gestación</span>
+                      <span className="text-xs font-semibold text-[#402B52]">Paciente en estado de gestación</span>
                     </label>
                   )}
                 </div>
@@ -513,14 +513,14 @@ export default function PatientsView() {
                       type="email" required placeholder="Correo electrónico del paciente"
                       value={newPatient.correo}
                       onChange={e => setNewPatient({ ...newPatient, correo: e.target.value })}
-                      className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#726E97]/20 transition"
+                      className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#A280B9]/20 transition"
                     />
                   </div>
                   <label className="flex items-center gap-2 cursor-pointer bg-slate-50 border border-slate-100 p-3 rounded-lg w-fit">
                     <input
                       type="checkbox" checked={newPatient.tiene_hijos}
                       onChange={e => setNewPatient({ ...newPatient, tiene_hijos: e.target.checked })}
-                      className="w-4 h-4 text-[#726E97] rounded"
+                      className="w-4 h-4 text-[#A280B9] rounded"
                     />
                     <span className="text-xs font-semibold text-slate-700">El paciente tiene hijos a su cargo</span>
                   </label>
@@ -536,7 +536,7 @@ export default function PatientsView() {
                   Cancelar
                 </button>
                 <button type="submit" disabled={isSubmitting}
-                  className="flex-1 px-4 py-2.5 bg-[#726E97] text-white rounded-lg text-sm font-bold hover:bg-[#5f5a82] transition shadow-sm flex items-center justify-center gap-2">
+                  className="flex-1 px-4 py-2.5 bg-[#A280B9] text-white rounded-lg text-sm font-bold hover:bg-[#553B5E] transition shadow-sm flex items-center justify-center gap-2">
                   {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserPlus className="w-4 h-4" />}
                   {isSubmitting ? "Registrando..." : "Crear Paciente y Cuenta"}
                 </button>

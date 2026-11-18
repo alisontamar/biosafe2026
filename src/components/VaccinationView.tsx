@@ -186,7 +186,7 @@ function QRModal({
       <div className="bg-white rounded-2xl w-full max-w-md shadow-xl overflow-hidden max-h-[92vh] flex flex-col">
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 shrink-0">
           <div className="flex items-center gap-2">
-            <QrCode className="w-4 h-4 text-[#726E97]" />
+            <QrCode className="w-4 h-4 text-[#A280B9]" />
             <h2 className="text-sm font-semibold text-slate-800">
               {phase === "scan" ? "Escanear carnet QR"
                 : phase === "patient" ? "Registrar vacuna"
@@ -211,11 +211,11 @@ function QRModal({
                 <div id="qr-reader-modal" className={`w-full h-full ${scanState === "active" ? "block" : "hidden"}`} />
                 {scanState === "active" && (
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="w-52 h-52 border-2 border-[#726E97] rounded-lg relative">
-                      <span className="absolute -top-px -left-px w-5 h-5 border-t-4 border-l-4 border-[#726E97] rounded-tl" />
-                      <span className="absolute -top-px -right-px w-5 h-5 border-t-4 border-r-4 border-[#726E97] rounded-tr" />
-                      <span className="absolute -bottom-px -left-px w-5 h-5 border-b-4 border-l-4 border-[#726E97] rounded-bl" />
-                      <span className="absolute -bottom-px -right-px w-5 h-5 border-b-4 border-r-4 border-[#726E97] rounded-br" />
+                    <div className="w-52 h-52 border-2 border-[#A280B9] rounded-lg relative">
+                      <span className="absolute -top-px -left-px w-5 h-5 border-t-4 border-l-4 border-[#A280B9] rounded-tl" />
+                      <span className="absolute -top-px -right-px w-5 h-5 border-t-4 border-r-4 border-[#A280B9] rounded-tr" />
+                      <span className="absolute -bottom-px -left-px w-5 h-5 border-b-4 border-l-4 border-[#A280B9] rounded-bl" />
+                      <span className="absolute -bottom-px -right-px w-5 h-5 border-b-4 border-r-4 border-[#A280B9] rounded-br" />
                     </div>
                   </div>
                 )}
@@ -223,7 +223,7 @@ function QRModal({
                   <div className="flex flex-col items-center gap-3">
                     {scanState === "processing" ? (
                       <>
-                        <div className="w-8 h-8 border-2 border-[#726E97] border-t-transparent rounded-full animate-spin" />
+                        <div className="w-8 h-8 border-2 border-[#A280B9] border-t-transparent rounded-full animate-spin" />
                         <p className="text-xs text-slate-400">Buscando paciente…</p>
                       </>
                     ) : (
@@ -240,7 +240,7 @@ function QRModal({
                   Cancelar escaneo
                 </button>
               ) : (
-                <button onClick={startScan} disabled={scanState === "processing"} className="w-full py-3 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition disabled:opacity-50" style={{ background: "#726E97" }}>
+                <button onClick={startScan} disabled={scanState === "processing"} className="w-full py-3 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition disabled:opacity-50" style={{ background: "#A280B9" }}>
                   {scanState === "processing" ? "Buscando..." : "Activar cámara"}
                 </button>
               )}
@@ -256,7 +256,7 @@ function QRModal({
           {phase === "patient" && paciente && (
             <>
               <div className="bg-slate-50 rounded-xl p-4 flex items-center gap-3 border border-slate-100">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ background: "#726E97" }}>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ background: "#A280B9" }}>
                   {getInitials(paciente.nombre_completo)}
                 </div>
                 <div>
@@ -292,7 +292,7 @@ function QRModal({
                 <select
                   value={selectedVaccineId}
                   onChange={(e) => setSelectedVaccineId(e.target.value)}
-                  className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 bg-white focus:outline-none focus:border-[#726E97]"
+                  className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 bg-white focus:outline-none focus:border-[#A280B9]"
                 >
                   <option value="">— Seleccionar vacuna —</option>
                   {vaccines.map((v) => (
@@ -312,7 +312,7 @@ function QRModal({
                   value={lote}
                   onChange={(e) => setLote(e.target.value)}
                   placeholder="Ej: LOT-2026-A4"
-                  className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 placeholder-slate-300 bg-white focus:outline-none focus:border-[#726E97]"
+                  className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 placeholder-slate-300 bg-white focus:outline-none focus:border-[#A280B9]"
                 />
               </div>
 
@@ -347,7 +347,7 @@ function QRModal({
               onClick={handleSave}
               disabled={!selectedVaccineId || saving}
               className="flex-[2] py-2.5 text-white rounded-xl text-sm font-semibold hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition"
-              style={{ background: "#726E97" }}
+              style={{ background: "#A280B9" }}
             >
               {saving ? "Guardando..." : "Confirmar registro"}
             </button>
@@ -395,7 +395,7 @@ function AddVaccineModal({ onClose, onSaved }: { onClose: () => void; onSaved: (
       <div className="bg-white rounded-2xl w-full max-w-sm shadow-xl overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
           <div className="flex items-center gap-2">
-            <Plus className="w-4 h-4 text-[#726E97]" />
+            <Plus className="w-4 h-4 text-[#A280B9]" />
             <h2 className="text-sm font-semibold text-slate-800">Agregar al catálogo</h2>
           </div>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100">
@@ -420,7 +420,7 @@ function AddVaccineModal({ onClose, onSaved }: { onClose: () => void; onSaved: (
               value={form.nombre_enfermedad}
               onChange={(e) => setForm({ ...form, nombre_enfermedad: e.target.value })}
               placeholder="Ej: Pentavalente, SRP, BCG, Influenza"
-              className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 placeholder-slate-300 focus:outline-none focus:border-[#726E97]"
+              className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 placeholder-slate-300 focus:outline-none focus:border-[#A280B9]"
             />
           </div>
 
@@ -433,7 +433,7 @@ function AddVaccineModal({ onClose, onSaved }: { onClose: () => void; onSaved: (
               value={form.dosis_numero}
               onChange={(e) => setForm({ ...form, dosis_numero: e.target.value })}
               placeholder="Ej: Dosis 1 · Dosis 2 · Refuerzo · Dosis única"
-              className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 placeholder-slate-300 focus:outline-none focus:border-[#726E97]"
+              className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 placeholder-slate-300 focus:outline-none focus:border-[#A280B9]"
             />
           </div>
 
@@ -448,7 +448,7 @@ function AddVaccineModal({ onClose, onSaved }: { onClose: () => void; onSaved: (
                 value={form.edad_min}
                 onChange={(e) => setForm({ ...form, edad_min: e.target.value })}
                 placeholder="Desde"
-                className="flex-1 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 placeholder-slate-300 focus:outline-none focus:border-[#726E97]"
+                className="flex-1 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 placeholder-slate-300 focus:outline-none focus:border-[#A280B9]"
               />
               <span className="text-slate-400 text-sm">—</span>
               <input
@@ -457,7 +457,7 @@ function AddVaccineModal({ onClose, onSaved }: { onClose: () => void; onSaved: (
                 value={form.edad_max}
                 onChange={(e) => setForm({ ...form, edad_max: e.target.value })}
                 placeholder="Hasta"
-                className="flex-1 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 placeholder-slate-300 focus:outline-none focus:border-[#726E97]"
+                className="flex-1 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 placeholder-slate-300 focus:outline-none focus:border-[#A280B9]"
               />
             </div>
             <div className="mt-2 bg-slate-50 rounded-lg px-3 py-2 text-[10px] text-slate-400 space-y-0.5">
@@ -475,7 +475,7 @@ function AddVaccineModal({ onClose, onSaved }: { onClose: () => void; onSaved: (
             onClick={handleSave}
             disabled={saving}
             className="flex-[2] py-2.5 text-white rounded-xl text-sm font-semibold hover:opacity-90 disabled:opacity-50 transition"
-            style={{ background: "#726E97" }}
+            style={{ background: "#A280B9" }}
           >
             {saving ? "Guardando..." : "Agregar al catálogo"}
           </button>
@@ -595,7 +595,7 @@ export default function VaccinationView() {
       {/* Encabezado */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#726E97]">Control de Vacunación</h1>
+          <h1 className="text-2xl font-bold text-[#A280B9]">Control de Vacunación</h1>
           <p className="text-sm text-slate-500 mt-0.5">
             Registro de dosis y gestión del esquema vacunal
           </p>
@@ -603,7 +603,7 @@ export default function VaccinationView() {
         <button
           onClick={() => openModal()}
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold hover:opacity-90 transition"
-          style={{ background: "#726E97" }}
+          style={{ background: "#A280B9" }}
         >
           <Plus className="w-4 h-4" />
           Nuevo registro
@@ -617,7 +617,7 @@ export default function VaccinationView() {
             key={t}
             onClick={() => setActiveTab(t)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-              activeTab === t ? "bg-white text-[#726E97] shadow-sm" : "text-slate-500 hover:text-slate-700"
+              activeTab === t ? "bg-white text-[#A280B9] shadow-sm" : "text-slate-500 hover:text-slate-700"
             }`}
           >
             {t === "registrar" ? "Registrar dosis" : "Catálogo y pendientes"}
@@ -629,13 +629,13 @@ export default function VaccinationView() {
       {activeTab === "registrar" && (
         loadingVaccines ? (
           <div className="flex justify-center py-10">
-            <div className="animate-spin rounded-full h-7 w-7 border-b-2 border-[#726E97]" />
+            <div className="animate-spin rounded-full h-7 w-7 border-b-2 border-[#A280B9]" />
           </div>
         ) : vaccineGroups.length === 0 ? (
           <div className="bg-white rounded-xl border border-slate-100 p-10 text-center">
             <Syringe className="w-8 h-8 text-slate-200 mx-auto mb-3" />
             <p className="text-sm text-slate-400 mb-3">No hay vacunas en el catálogo.</p>
-            <button onClick={() => setActiveTab("catalogo")} className="text-xs text-[#726E97] font-semibold hover:underline">
+            <button onClick={() => setActiveTab("catalogo")} className="text-xs text-[#A280B9] font-semibold hover:underline">
               Ir al catálogo para agregar →
             </button>
           </div>
@@ -644,7 +644,7 @@ export default function VaccinationView() {
             {vaccineGroups.map((group) => (
               <div key={group.nombre_enfermedad} className="bg-white p-5 rounded-xl border border-slate-100 shadow-sm flex flex-col gap-3">
                 <div className="flex items-start gap-3">
-                  <div className="p-2 bg-[#726E97]/10 rounded-lg text-[#726E97] shrink-0">
+                  <div className="p-2 bg-[#A280B9]/10 rounded-lg text-[#A280B9] shrink-0">
                     <Syringe className="w-5 h-5" />
                   </div>
                   <div>
@@ -661,7 +661,7 @@ export default function VaccinationView() {
                 </div>
                 <button
                   onClick={() => openModal(group.doses[0]?.id_vacuna)}
-                  className="mt-auto w-full py-2 border border-[#726E97] text-[#726E97] rounded-lg text-sm font-semibold hover:bg-[#726E97] hover:text-white transition flex items-center justify-center gap-2"
+                  className="mt-auto w-full py-2 border border-[#A280B9] text-[#A280B9] rounded-lg text-sm font-semibold hover:bg-[#A280B9] hover:text-white transition flex items-center justify-center gap-2"
                 >
                   <QrCode className="w-4 h-4" />
                   Registrar aplicación
@@ -684,7 +684,7 @@ export default function VaccinationView() {
                 <button
                   onClick={() => setShowAddVaccine(true)}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-white text-xs font-semibold hover:opacity-90 transition"
-                  style={{ background: "#726E97" }}
+                  style={{ background: "#A280B9" }}
                 >
                   <Plus className="w-3.5 h-3.5" />
                   Agregar vacuna
@@ -694,7 +694,7 @@ export default function VaccinationView() {
 
             {loadingVaccines ? (
               <div className="flex justify-center py-8">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#726E97]" />
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#A280B9]" />
               </div>
             ) : vaccineGroups.length === 0 ? (
               <div className="bg-white rounded-xl border border-slate-100 p-8 text-center">
@@ -707,7 +707,7 @@ export default function VaccinationView() {
                   <div key={group.nombre_enfermedad} className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
                     {/* Header del grupo */}
                     <div className="px-4 py-3 flex items-center gap-3 bg-slate-50 border-b border-slate-100">
-                      <div className="p-1.5 bg-[#726E97]/10 rounded-lg text-[#726E97] shrink-0">
+                      <div className="p-1.5 bg-[#A280B9]/10 rounded-lg text-[#A280B9] shrink-0">
                         <Syringe className="w-4 h-4" />
                       </div>
                       <p className="text-sm font-semibold text-slate-800 flex-1">{group.nombre_enfermedad}</p>
@@ -724,15 +724,15 @@ export default function VaccinationView() {
                           key={dose.id_vacuna}
                           onClick={() => handleSelectDose({ ...dose, nombre_enfermedad: group.nombre_enfermedad })}
                           className={`w-full flex items-center justify-between px-4 py-3 border-b border-slate-50 last:border-0 hover:bg-slate-50 transition text-left ${
-                            isSelected ? "bg-[#726E97]/5 border-l-2 border-l-[#726E97]" : ""
+                            isSelected ? "bg-[#A280B9]/5 border-l-2 border-l-[#A280B9]" : ""
                           }`}
                         >
                           <div className="flex items-center gap-2.5">
-                            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isSelected ? "bg-[#726E97]" : "bg-slate-300"}`} />
+                            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isSelected ? "bg-[#A280B9]" : "bg-slate-300"}`} />
                             <span className="text-xs font-medium text-slate-700">{dose.dosis_numero}</span>
                             <span className="text-[10px] text-slate-400">desde {dose.edad_meses_ideal} meses</span>
                           </div>
-                          <div className="flex items-center gap-1 text-[10px] text-[#726E97]">
+                          <div className="flex items-center gap-1 text-[10px] text-[#A280B9]">
                             <Users className="w-3 h-3" />
                             <span>Pendientes</span>
                             <ChevronRight className="w-3 h-3 text-slate-300" />
@@ -758,7 +758,7 @@ export default function VaccinationView() {
             ) : (
               <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
                 {/* Header del panel */}
-                <div className="px-4 py-3.5 flex items-center justify-between" style={{ background: "#726E97" }}>
+                <div className="px-4 py-3.5 flex items-center justify-between" style={{ background: "#A280B9" }}>
                   <div>
                     <p className="text-sm font-semibold text-white">{selectedDose.nombre_enfermedad}</p>
                     <p className="text-[10px] text-white/70 mt-0.5">{selectedDose.dosis_numero}</p>
@@ -784,7 +784,7 @@ export default function VaccinationView() {
                         min="0"
                         value={ageMin}
                         onChange={(e) => setAgeMin(e.target.value)}
-                        className="w-full border border-slate-200 rounded-lg px-2.5 py-2 text-xs text-slate-700 bg-white focus:outline-none focus:border-[#726E97]"
+                        className="w-full border border-slate-200 rounded-lg px-2.5 py-2 text-xs text-slate-700 bg-white focus:outline-none focus:border-[#A280B9]"
                       />
                     </div>
                     <span className="text-slate-400 text-xs mb-2">—</span>
@@ -795,14 +795,14 @@ export default function VaccinationView() {
                         min="0"
                         value={ageMax}
                         onChange={(e) => setAgeMax(e.target.value)}
-                        className="w-full border border-slate-200 rounded-lg px-2.5 py-2 text-xs text-slate-700 bg-white focus:outline-none focus:border-[#726E97]"
+                        className="w-full border border-slate-200 rounded-lg px-2.5 py-2 text-xs text-slate-700 bg-white focus:outline-none focus:border-[#A280B9]"
                       />
                     </div>
                     <button
                       onClick={loadPendingPatients}
                       disabled={loadingPending}
                       className="px-3 py-2 rounded-lg text-white text-xs font-semibold hover:opacity-90 disabled:opacity-50 transition whitespace-nowrap"
-                      style={{ background: "#726E97" }}
+                      style={{ background: "#A280B9" }}
                     >
                       {loadingPending ? "..." : "Buscar"}
                     </button>
@@ -816,7 +816,7 @@ export default function VaccinationView() {
                 <div className="divide-y divide-slate-50 max-h-72 overflow-y-auto">
                   {loadingPending && (
                     <div className="flex justify-center py-8">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#726E97]" />
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#A280B9]" />
                     </div>
                   )}
 
