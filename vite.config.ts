@@ -22,6 +22,7 @@ export default defineConfig({
     testTimeout: 20000,
     coverage: {
       provider: 'v8',
+      reporter: ['text', 'html', 'cobertura'], // cobertura → plugin Coverage de Jenkins
       include: ['src/**/*.{ts,tsx}'],
       exclude: ['src/main.tsx', 'src/vite-env.d.ts', 'src/test/**'],
     },

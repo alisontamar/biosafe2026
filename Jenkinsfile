@@ -36,6 +36,11 @@ pipeline {
         always {
           junit allowEmptyResults: true, testResults: 'reports/junit.xml'
           archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: true
+          // Gráfica de cobertura en Jenkins (requiere el plugin "Coverage")
+          recordCoverage(
+            tools: [[parser: 'COBERTURA', pattern: 'coverage/cobertura-coverage.xml']],
+            sourceCodeRetention: 'EVERY_BUILD'
+          )
         }
       }
     }
