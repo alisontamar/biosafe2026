@@ -39,10 +39,13 @@ pipeline {
           junit allowEmptyResults: true, testResults: 'reports/junit.xml'
           archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: true
           // Gráfica de cobertura en Jenkins (requiere el plugin "Coverage")
-          recordCoverage(
-            tools: [[parser: 'COBERTURA', pattern: 'coverage/cobertura-coverage.xml']],
-            sourceCodeRetention: 'EVERY_BUILD'
-          )
+          catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+            recordCoverage(
+              tools: [[parser: 'COBERTURA', pattern: 'coverage/cobertura-coverage.xml']],
+              ignoreParsingErrors: true, // el XML de v8 trae elementos duplicados
+              sourceCodeRetention: 'EVERY_BUILD'
+            )
+          }
         }
       }
     }
