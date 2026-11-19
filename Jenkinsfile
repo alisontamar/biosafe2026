@@ -1,5 +1,6 @@
 // Pipeline para Jenkins en Windows (sin Docker).
-// Requisitos en el servidor Jenkins: Node.js 20+ en el PATH (o plugin NodeJS) y plugins Git, Pipeline y JUnit.
+// Requisitos en el servidor Jenkins: Node.js 20+ en el PATH (o plugin NodeJS) y plugins Git, Pipeline, JUnit, Coverage y HTML Publisher.
+// El reporte Serenity BDD necesita Java 11+ (se usa el JDK 21 de Adoptium; ajusta JAVA21_HOME si está en otra ruta).
 pipeline {
   agent any
 
@@ -10,6 +11,7 @@ pipeline {
 
   environment {
     CI = 'true'
+    JAVA21_HOME = 'C:/Program Files/Eclipse Adoptium/jdk-21.0.11.10-hotspot'
   }
 
   stages {
@@ -41,6 +43,30 @@ pipeline {
             tools: [[parser: 'COBERTURA', pattern: 'coverage/cobertura-coverage.xml']],
             sourceCodeRetention: 'EVERY_BUILD'
           )
+        }
+      }
+    }
+
+    stage('Pruebas E2E (Serenity BDD)') {
+      steps {
+        bat 'npx playwright install chromium'
+        // Genera target/site/serenity (JSON); si una prueba falla igualmente se publica el reporte
+        bat 'npx playwright test'
+      }
+      post {
+        always {
+          withEnv(["JAVA_HOME=${env.JAVA21_HOME}", "PATH+JAVA=${env.JAVA21_HOME}/bin"]) {
+            bat 'npm run serenity:report'
+          }
+          archiveArtifacts artifacts: 'target/site/serenity/**', allowEmptyArchive: true
+          publishHTML(target: [
+            reportName: 'Serenity Report',
+            reportDir: 'target/site/serenity',
+            reportFiles: 'index.html',
+            keepAll: true,
+            alwaysLinkToLastBuild: true,
+            allowMissing: true
+          ])
         }
       }
     }

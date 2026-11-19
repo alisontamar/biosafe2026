@@ -19,6 +19,7 @@ export default defineConfig({
       VITE_SUPABASE_PUBLISHABLE_KEY: 'test-publishable-key',
       VITE_SUPABASE_SERVICE_ROLE_KEY: 'test-service-key',
     },
+    exclude: ['node_modules/**', 'dist/**', 'e2e/**'], // e2e lo corre Playwright/Serenity
     testTimeout: 20000,
     coverage: {
       provider: 'v8',

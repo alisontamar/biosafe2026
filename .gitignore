@@ -25,3 +25,8 @@ dist-ssr
 # Salidas de tests/CI
 coverage
 reports
+
+# Serenity
+target
+test-results
+playwright-report
