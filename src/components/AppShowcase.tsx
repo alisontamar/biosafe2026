@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const screens = [
   { img: 'carnet', title: 'Tu carnet digital', text: 'El historial de vacunas de toda tu familia, siempre contigo.' },
   { img: 'inicio', title: 'Inicio familiar', text: 'Estado de vacunas y recomendaciones del día en un vistazo.' },
+  { img: 'expediente', title: 'Expediente de cada integrante', text: 'Vacunas pendientes y aplicadas, con su carnet digital o físico.' },
   { img: 'qr', title: 'Código QR personal', text: 'Preséntalo al personal médico y accede al expediente al instante.' },
   { img: 'educacion', title: 'Educación', text: 'Guías claras para el embarazo y los primeros pasos del recién nacido.' },
   { img: 'alertas-mapa', title: 'Alertas en el mapa', text: 'Brotes de los últimos 7 días ubicados por departamento.' },

@@ -3,10 +3,10 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import AppShowcase from './AppShowcase';
 
 describe('AppShowcase', () => {
-  it('tiene el ancla "app" y muestra las 10 pantallas', () => {
+  it('tiene el ancla "app" y muestra las 11 pantallas', () => {
     const { container } = render(<AppShowcase />);
     expect(container.querySelector('section')).toHaveAttribute('id', 'app');
-    expect(screen.getAllByRole('img')).toHaveLength(10);
+    expect(screen.getAllByRole('img')).toHaveLength(11);
   });
 
   it('los botones desplazan el carrusel', () => {
