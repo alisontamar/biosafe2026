@@ -202,7 +202,7 @@ export default function AISection() {
       id="ia"
       style={{
         padding: '5rem 1.5rem',
-        background: '#F8F9FA',
+        background: '#F4EEF9',
         position: 'relative',
         overflow: 'hidden',
       }}

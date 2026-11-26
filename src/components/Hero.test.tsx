@@ -39,11 +39,22 @@ describe('Hero', () => {
     );
   });
 
-  it('la imagen de fondo es decorativa', () => {
-    const { container } = render(<Hero />);
-    const img = container.querySelector('img')!;
-    expect(img).toHaveAttribute('aria-hidden', 'true');
-    expect(img).toHaveAttribute('alt', '');
+  it('muestra las tres ilustraciones con texto alternativo', () => {
+    render(<Hero />);
+    const imgs = screen.getAllByRole('img');
+    expect(imgs).toHaveLength(3);
+    imgs.forEach((img) => expect(img.getAttribute('alt')).not.toBe(''));
+  });
+
+  it('rota las ilustraciones solo y permite elegir una', () => {
+    vi.useFakeTimers();
+    render(<Hero />);
+    const imgs = screen.getAllByRole('img');
+    expect(imgs[0].style.opacity).toBe('1');
+    act(() => { vi.advanceTimersByTime(5000); });
+    expect(imgs[1].style.opacity).toBe('1');
+    fireEvent.click(screen.getByLabelText('Ilustración 3'));
+    expect(imgs[2].style.opacity).toBe('1');
   });
 
   it('las letras reaccionan al hover solo cuando terminó la animación', () => {

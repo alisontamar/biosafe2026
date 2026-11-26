@@ -41,7 +41,7 @@ const features = [
 
 export default function HowItWorks() {
   return (
-    <section id="que-es" style={{ padding: '5rem 1.5rem', background: '#F8F9FA' }}>
+    <section id="que-es" style={{ padding: '5rem 1.5rem', background: '#F4EEF9' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
         {/* Header */}
@@ -101,7 +101,8 @@ export default function HowItWorks() {
                 background: '#ffffff',
                 borderRadius: 20,
                 padding: '2rem 1.75rem',
-                border: `1.5px solid ${accent}22`,
+                border: `1.5px solid ${accent}40`,
+                boxShadow: '0 6px 20px -6px rgba(114,110,151,0.18)',
                 transition: 'border-color 0.25s, box-shadow 0.25s, transform 0.25s',
                 cursor: 'default',
                 position: 'relative',
@@ -115,8 +116,8 @@ export default function HowItWorks() {
               }}
               onMouseLeave={e => {
                 const el = e.currentTarget as HTMLDivElement;
-                el.style.borderColor = accent + '22';
-                el.style.boxShadow = 'none';
+                el.style.borderColor = accent + '40';
+                el.style.boxShadow = '0 6px 20px -6px rgba(114,110,151,0.18)';
                 el.style.transform = 'translateY(0)';
               }}
             >

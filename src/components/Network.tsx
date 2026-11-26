@@ -41,7 +41,7 @@ const audiences = [
 
 export default function Network() {
   return (
-    <section id="red" style={{ padding: '5rem 1.5rem', background: '#F8F9FA' }}>
+    <section id="red" style={{ padding: '5rem 1.5rem', background: '#F4EEF9' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
         {/* Header */}
@@ -101,7 +101,8 @@ export default function Network() {
                 background: '#ffffff',
                 borderRadius: 24,
                 overflow: 'hidden',
-                border: `1.5px solid ${accent}18`,
+                border: `1.5px solid ${accent}40`,
+                boxShadow: '0 6px 20px -6px rgba(114,110,151,0.18)',
                 transition: 'box-shadow 0.25s, transform 0.25s, border-color 0.25s',
                 display: 'flex',
                 flexDirection: 'column',
@@ -114,9 +115,9 @@ export default function Network() {
               }}
               onMouseLeave={e => {
                 const el = e.currentTarget as HTMLDivElement;
-                el.style.boxShadow = 'none';
+                el.style.boxShadow = '0 6px 20px -6px rgba(114,110,151,0.18)';
                 el.style.transform = 'translateY(0)';
-                el.style.borderColor = accent + '18';
+                el.style.borderColor = accent + '40';
               }}
             >
               {/* Top band */}
