@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { 
-  Home, Users, Syringe, Bell, FileText, BarChart3, Settings, Plus, ChevronDown, LogOut, Menu, X
+  Home, Users, Syringe, Bell, FileText, BarChart3, Settings, ChevronDown, LogOut, Menu, X
 } from "lucide-react";
 
 import { supabase } from "../lib/supabase";
@@ -148,7 +148,7 @@ export default function AdminDashboard() {
   const filteredMenu = getFilteredMenu();
 
   return (
-    <div className="h-screen overflow-hidden bg-[#F8F9FA] text-slate-800 flex">
+    <div className="h-screen overflow-hidden bg-[#F5F0FA] text-slate-800 flex">
 
       {/* Overlay para mobile — tapa el fondo cuando el drawer está abierto */}
       {sidebarOpen && (
@@ -161,31 +161,34 @@ export default function AdminDashboard() {
       {/* Sidebar — fijo en desktop, drawer deslizable en mobile */}
       <aside
         className={`
-          fixed top-0 left-0 h-full w-[260px] bg-[#A280B9] text-white flex flex-col p-4 z-30
+          fixed top-0 left-0 h-full w-[240px] bg-white text-[#553B5E] flex flex-col p-4 z-30
+          border-r border-[#EADFF2] shadow-xl
           transform transition-transform duration-300 ease-in-out
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-          md:relative md:translate-x-0 md:flex
+          md:relative md:translate-x-0 md:flex md:h-auto md:my-4 md:ml-4 md:rounded-[28px]
+          md:border md:shadow-[0_10px_30px_-12px_rgba(114,110,151,0.25)] md:shrink-0
         `}
       >
         {/* Header del sidebar con botón de cierre en mobile */}
-        <div className="flex items-center justify-between px-2 mb-10 mt-2">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-lg">
-              <Plus className="w-6 h-6 text-[#A280B9]" />
-            </div>
-            <span className="text-2xl font-bold tracking-tight">BioSafe</span>
+        <div className="flex items-center justify-between px-2 mb-8 mt-2">
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="" aria-hidden="true" className="h-9 w-auto" />
+            <span className="text-xl font-bold tracking-tight">
+              <span className="text-[#A280B9]">Bio</span>
+              <span className="text-[#7698B3]">Safe</span>
+            </span>
           </div>
           {/* Botón X solo visible en mobile */}
           <button
             onClick={() => setSidebarOpen(false)}
-            className="md:hidden p-1 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-all"
+            className="md:hidden p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all"
             aria-label="Cerrar menú"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <nav className="space-y-2 flex-1">
+        <nav className="space-y-1 flex-1">
           {filteredMenu.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -193,14 +196,15 @@ export default function AdminDashboard() {
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
-                  isActive 
-                  ? "bg-white/20 text-white shadow-inner" 
-                  : "text-white/70 hover:bg-white/10 hover:text-white"
+                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-[13px] font-medium transition-all duration-200 ${
+                  isActive
+                  ? "bg-[#F1E8F8] text-[#6B4A85] font-semibold"
+                  : "text-[#7A6788] hover:bg-[#F8F3FC] hover:text-[#553B5E]"
                 }`}
               >
-                <Icon className={`w-5 h-5 ${isActive ? "opacity-100" : "opacity-70"}`} />
-                {item.label}
+                <Icon className={`w-[18px] h-[18px] ${isActive ? "text-[#A280B9]" : "opacity-70"}`} />
+                <span className="flex-1 text-left">{item.label}</span>
+                {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#A280B9]" />}
               </button>
             );
           })}
@@ -208,16 +212,16 @@ export default function AdminDashboard() {
 
         <button 
           onClick={handleLogout}
-          className="mt-auto flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-white/70 hover:bg-red-500/20 hover:text-red-200 transition-all"
+          className="mt-auto flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-[13px] font-medium text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all"
         >
-          <LogOut className="w-5 h-5" />
+          <LogOut className="w-[18px] h-[18px]" />
           Cerrar Sesión
         </button>
       </aside>
 
       {/* Área principal */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden min-w-0">
-        <header className="h-16 bg-white border-b flex items-center justify-between px-4 md:px-8 shrink-0">
+        <header className="h-[72px] flex items-center justify-between px-4 md:px-8 shrink-0">
           <div className="flex items-center gap-3">
             {/* Botón hamburguesa — solo visible en mobile */}
             <button
@@ -228,12 +232,12 @@ export default function AdminDashboard() {
               <Menu className="w-5 h-5" />
             </button>
 
-            <div className="text-xs font-medium text-slate-500 bg-slate-50 px-3 py-2 rounded-lg border hidden sm:block">
+            <div className="text-xs font-medium text-[#7A6788] bg-white px-4 py-2 rounded-full border border-[#EADFF2] shadow-sm hidden sm:block">
               Establecimiento: <span className="text-slate-800 font-bold">{userData?.establecimiento}</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 bg-white border border-[#EADFF2] shadow-sm rounded-full pl-3 pr-4 py-1.5">
             {getFilteredMenu().some((m) => m.id === "alertas") && (
               <AlertBell onVerTodas={() => handleNavClick("alertas")} />
             )}
@@ -250,7 +254,7 @@ export default function AdminDashboard() {
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#F8F9FA]">
+        <div className="flex-1 overflow-y-auto px-4 pb-4 md:px-8 md:pb-8">
           <div className="max-w-6xl mx-auto">
             {renderView()}
           </div>
