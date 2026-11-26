@@ -153,7 +153,7 @@ export default function Network() {
 
               {/* Content */}
               <div style={{ padding: '1.5rem 1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <p style={{ fontSize: '0.875rem', fontWeight: 300, color: '#7698B3', lineHeight: 1.7, margin: '0 0 1.25rem' }}>
+                <p style={{ fontSize: '0.875rem', fontWeight: 300, color: '#6B5A7A', lineHeight: 1.7, margin: '0 0 1.25rem' }}>
                   {description}
                 </p>
 
@@ -193,9 +193,12 @@ export default function Network() {
         {/* Download banner */}
         <div
           style={{
-            borderRadius: 24,
+            position: 'relative',
+            overflow: 'hidden',
+            borderRadius: 32,
             padding: '2.5rem',
-            background: '#A280B9',
+            background: 'linear-gradient(160deg, #8A63A5 0%, #7A5496 55%, #664482 100%)',
+            boxShadow: '0 18px 40px -14px rgba(102,68,130,0.45)',
             display: 'flex',
             flexWrap: 'wrap',
             alignItems: 'center',
@@ -203,7 +206,8 @@ export default function Network() {
             gap: '1.5rem',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+          <div aria-hidden="true" style={{ position: 'absolute', top: -90, right: -60, width: 260, height: 260, borderRadius: '50%', background: 'rgba(255,255,255,0.07)' }} />
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
             <div
               style={{
                 width: 56, height: 56, borderRadius: 16,
@@ -225,14 +229,14 @@ export default function Network() {
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <div style={{ position: 'relative', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
             {['Google Play', 'App Store'].map(store => (
               <div
                 key={store}
                 style={{
                   padding: '0.7rem 1.5rem',
-                  borderRadius: 12,
-                  background: 'rgba(255,255,255,0.12)',
+                  borderRadius: 999,
+                  background: 'rgba(255,255,255,0.14)',
                   backdropFilter: 'blur(8px)',
                   border: '1px solid rgba(255,255,255,0.2)',
                   fontSize: '0.85rem',
