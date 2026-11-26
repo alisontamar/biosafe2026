@@ -200,7 +200,8 @@ export default function Header() {
           <div className="h-[58px] flex items-center justify-between rounded-2xl border border-white/35 bg-white/20 backdrop-blur-xl shadow-[0_8px_30px_rgba(31,41,55,0.08)] px-4 sm:px-5">
 
             {/* Logo */}
-            <a href="#inicio" className="logo-word logo-animate">
+            <a href="#inicio" className="logo-word logo-animate" style={{ gap: '6px' }}>
+              <img src="/logo.png" alt="" aria-hidden="true" style={{ height: '36px', width: 'auto' }} />
               <span style={{ color: '#A280B9' }}>Bio</span>
               <span style={{ color: '#7698B3' }}>Safe</span>
             </a>
