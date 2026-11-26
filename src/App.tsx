@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import HowItWorks from "./components/HowItWorks";
+import AppShowcase from "./components/AppShowcase";
 import AISection from "./components/AISection";
 import Network from "./components/Network";
 import Footer from "./components/Footer";
@@ -36,6 +37,7 @@ export default function App() {
       <main>
         <Hero />
         <HowItWorks />
+        <AppShowcase />
         <AISection />
         <Network />
       </main>
